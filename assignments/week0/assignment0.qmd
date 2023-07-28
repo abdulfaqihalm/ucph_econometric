@@ -1,0 +1,147 @@
+---
+title: "assignment_0"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+## Exercise 0: Playing around with new data
+
+```{r}
+library(stargazer)
+
+titanic_data <- read.csv("titanic.csv")
+head(titanic_data)
+
+stargazer(titanic_data, type = "text")
+```
+
+## Exercise 1: Basic data wrangling with R
+
+Sort the data frame by Age in descending order, such that the first observation is the passenger with the highest age.
+
+```{r}
+# The NA ages will be on the last.
+titanic_data <- titanic_data[order(titanic_data$Age, decreasing = TRUE),]
+
+# The oldest passanger name
+titanic_data[1,"Name"]
+
+```
+
+## Exercise 2: Dealing with NAs
+
+Investigate the structure of the data set using the command str(). Describe your findings. Next, remove all missing values using na.omit().
+
+
+```{r}
+str(titanic_data)
+```
+From the above result, we can see that the data contains three data types: int, chr, and num (float). The num is responsible for the non-integer numbers. 
+Next, we exclude the rows with NA values
+```{r}
+titanic_data <- na.omit(titanic_data)
+dim(titanic_data)
+```
+We could see that the records are reduced into 714 instead of 891. 
+
+## Exercise 3: Basic visualization with R
+
+Next, plot the distribution of the variable Age using the function hist().
+```{r}
+hist(titanic_data$Age, breaks = 40, xlab = "Age", main = "Distribution of The Passanger Age")
+```
+
+## Exercise 4: Conditional means
+
+How many people survived the Titanic? 
+```{r}
+table(titanic_data$Survived)
+```
+As we can see, there are 290 passengers who were survived (flagged with '1'). 
+Furthermore, to know the distribution of survived passengers for each class as well as the embarked place, we can make a tabulation for each of them
+```{r}
+survived_per_class <- table(titanic_data[, c("Survived", "Pclass")])
+survived_per_class
+survived_per_embarked <- table(titanic_data[, c("Survived", "Embarked")])
+survived_per_embarked
+
+```
+Here, we can see according to the ticket class, most of the survived passengers came from the first class. Furthermore, based on the embarked place, most of the survived passengers were from the "S". 
+
+
+## Exercise 5: Lower level plotting
+How many people survived the Titanic? 
+```{r}
+barplot(survived_per_class, beside = TRUE, 
+        col = c("mistyrose", "lightcyan"),
+        xlab = "Passenger Class", ylab = "Freq", 
+        legend.text = row.names(survived_per_class),
+        main = "Survival Rate of Each Passenger Class",
+        args.legend = list(title="Survived"))
+
+
+barplot(survived_per_embarked, beside = TRUE, 
+        col = c("mistyrose", "lightcyan"),
+        xlab = "Embarked At", ylab = "Freq", 
+        legend.text = row.names(survived_per_class),
+        main = "Survival Rate of Each Embarkment",
+        args.legend = list(title="Survived"))
+```
+
+## Exercise 6: Installing packages with R
+How many people survived the Titanic? 
+```{r}
+#| eval: false
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("rpart")
+install.packages("rpart.plot")
+```
+
+## Exercise 7: Plotting using ggplot2
+
+Make a density plot of the variable Age in a color of your choice using the geom_density() function in ggplot2
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+ggplot(data = titanic_data, mapping = aes(x = Age)) + 
+  geom_density(fill = "lightblue", alpha = 0.5, color = "lightblue") + 
+  labs(title = "Distribution of The Passanger Age") + 
+  theme_bw()
+```
+Next, we assign each passanger into an age gropu 
+```{r}
+titanic_data <- titanic_data |> 
+  mutate(Group = ceiling(Age/10))
+
+table(titanic_data[, c("Survived", "Group")])
+```
+From the comparison above, we can see that only the Age Group 1 that has higher portion of survived passengers. Interestingly, this group is in the range of 0-10 years old! 
+
+
+## Exercise 8: Regressions
+First, we are going to fit a linear model to know the relation between the passenger class and the survival rate
+```{r}
+fitted_model <- lm(data = titanic_data, formula = Survived ~ Pclass)
+
+summary(fitted_model)
+```
+From the summary of the fitted model, it produces relatively low R-squared. Hence, the passenger class variable only can not predict the survival of the passenger. 
+
+Including Age, Sex, SibSp, and Parch variables would make sense to the model. We can see that according to the distribution that we plotted above, young passesngers (1-10 years old) tend to be survived. This might be due to their older siblings or parents tried as best as they could to save them. Hence, adding the Parch and Sibsp would be a good idea. 
+
+```{r}
+fitted_model_2 <- lm(data = titanic_data, formula = Survived ~ Pclass + Age + Sex + SibSp + Parch)
+
+summary(fitted_model_2)
+```
+According to the summary of the second model, we could see the improvement of the r-squared into ~0.4. 
+
+
+Reporting with stargazer 
+```{r}
+stargazer(fitted_model_2, type = "text")
+```
