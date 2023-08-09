@@ -192,7 +192,7 @@ Fare        891 32.204   49.693  0.000 512.329
  $ Embarked   : chr  "S" "S" "C" "C" ...</code></pre>
 </div>
 </div>
-<p>From the above result, we can see that the data contains three data types: int, chr, and num (float). The num is reponsible for the non-integer numbers. Next, we exclude the rows with NA values</p>
+<p>From the above result, we can see that the data contains three data types: int, chr, and num (float). The num is responsible for the non-integer numbers. Next, we exclude the rows with NA values</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>titanic_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(titanic_data)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(titanic_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -252,12 +252,173 @@ Survived       C   Q   S
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"mistyrose"</span>, <span class="st">"lightcyan"</span>),</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Passenger Class"</span>, <span class="at">ylab =</span> <span class="st">"Freq"</span>, </span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">row.names</span>(survived_per_class),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">title=</span><span class="st">"Survived"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Survival Rate of Each Passenger Class"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">title=</span><span class="st">"Survived"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="assignment0_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(survived_per_embarked, <span class="at">beside =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"mistyrose"</span>, <span class="st">"lightcyan"</span>),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Embarked At"</span>, <span class="at">ylab =</span> <span class="st">"Freq"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">row.names</span>(survived_per_class),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Survival Rate of Each Embarkment"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">title=</span><span class="st">"Survived"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="assignment0_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
 </div>
-<p>asdf</p>
+</div>
+</section>
+<section id="exercise-6-installing-packages-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-6-installing-packages-with-r">Exercise 6: Installing packages with R</h2>
+<p>How many people survived the Titanic?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rpart"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rpart.plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-7-plotting-using-ggplot2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-7-plotting-using-ggplot2">Exercise 7: Plotting using ggplot2</h2>
+<p>Make a density plot of the variable Age in a color of your choice using the geom_density() function in ggplot2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> titanic_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Age)) <span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of The Passanger Age"</span>) <span class="sc">+</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="assignment0_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Next, we assign each passanger into an age gropu</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>titanic_data <span class="ot">&lt;-</span> titanic_data <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">ceiling</span>(Age<span class="sc">/</span><span class="dv">10</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(titanic_data[, <span class="fu">c</span>(<span class="st">"Survived"</span>, <span class="st">"Group"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Group
+Survived   1   2   3   4   5   6   7   8
+       0  26  71 146  86  53  25  13   4
+       1  38  44  84  69  33  17   4   1</code></pre>
+</div>
+</div>
+<p>From the comparison above, we can see that only the Age Group 1 that has higher portion of survived passengers. Interestingly, this group is in the range of 0-10 years old!</p>
+</section>
+<section id="exercise-8-regressions" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-8-regressions">Exercise 8: Regressions</h2>
+<p>First, we are going to fit a linear model to know the relation between the passenger class and the survival rate</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fitted_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> titanic_data, <span class="at">formula =</span> Survived <span class="sc">~</span> Pclass)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fitted_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Survived ~ Pclass, data = titanic_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6669 -0.2452 -0.2452  0.3331  0.7548 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.87780    0.04897   17.93   &lt;2e-16 ***
+Pclass      -0.21086    0.02050  -10.29   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4589 on 712 degrees of freedom
+Multiple R-squared:  0.1294,    Adjusted R-squared:  0.1281 
+F-statistic: 105.8 on 1 and 712 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>From the summary of the fitted model, it produces relatively low R-squared. Hence, the passenger class variable only can not predict the survival of the passenger.</p>
+<p>Including Age, Sex, SibSp, and Parch variables would make sense to the model. We can see that according to the distribution that we plotted above, young passesngers (1-10 years old) tend to be survived. This might be due to their older siblings or parents tried as best as they could to save them. Hence, adding the Parch and Sibsp would be a good idea.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fitted_model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> titanic_data, <span class="at">formula =</span> Survived <span class="sc">~</span> Pclass <span class="sc">+</span> Age <span class="sc">+</span> Sex <span class="sc">+</span> SibSp <span class="sc">+</span> Parch)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fitted_model_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Survived ~ Pclass + Age + Sex + SibSp + Parch, data = titanic_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.11380 -0.23756 -0.06598  0.22298  0.99990 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.401792   0.066523  21.072  &lt; 2e-16 ***
+Pclass      -0.205147   0.018781 -10.923  &lt; 2e-16 ***
+Age         -0.006588   0.001125  -5.854 7.36e-09 ***
+Sexmale     -0.489797   0.031307 -15.645  &lt; 2e-16 ***
+SibSp       -0.051687   0.017272  -2.993  0.00286 ** 
+Parch       -0.008990   0.018684  -0.481  0.63056    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3821 on 708 degrees of freedom
+Multiple R-squared:  0.3999,    Adjusted R-squared:  0.3957 
+F-statistic: 94.37 on 5 and 708 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>According to the summary of the second model, we could see the improvement of the r-squared into ~0.4.</p>
+<p>Reporting with stargazer</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(fitted_model_2, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                             Survived          
+-----------------------------------------------
+Pclass                       -0.205***         
+                              (0.019)          
+                                               
+Age                          -0.007***         
+                              (0.001)          
+                                               
+Sexmale                      -0.490***         
+                              (0.031)          
+                                               
+SibSp                        -0.052***         
+                              (0.017)          
+                                               
+Parch                         -0.009           
+                              (0.019)          
+                                               
+Constant                     1.402***          
+                              (0.067)          
+                                               
+-----------------------------------------------
+Observations                    714            
+R2                             0.400           
+Adjusted R2                    0.396           
+Residual Std. Error      0.382 (df = 708)      
+F Statistic           94.366*** (df = 5; 708)  
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
 </section>
 
 </main>

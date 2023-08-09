@@ -1,0 +1,131 @@
+---
+title: "assignment_1"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+## **Problem 1.1**
+
+Suppose that you are asked to conduct a study to determine whether smaller class sizes lead to improved student performance of fourth graders.
+
+1.  If you could conduct ***any experiment*** in order to investigate the above problem, what would you do? Try to be specific. \
+    \
+    There are several steps that I would like to do: I will gather random samples of fourth graders from several public schools within a state (assuming that the public schools teaching quality are the same) and their average performance of particular standardized test as well as their class size
+
+2.  More realistically, suppose you can collect observational data on several thousand fourth graders in a given state. You can obtain the size of their fourth-grade class and a standardized test score taken at the end of fourth grade. Why might you expect a negative correlation between class size and test scores?\
+    \
+    The expectatio is that the fewer number of students, the higher quality of teaching due to the teachers might able to pay more attention to the individual students if they have any learning problems in the classes.\
+
+3.  Would a negative correlation necessarily show that smaller class sizes cause better performance? Please elaborate on your answer.\
+    \
+    As long as our assumption is not violated (the same quality teaching, same average innate ability of the students) the correlation might be useful.
+
+## **Problem 1.3**
+
+A justification for job training programs is that they improve worker productivity. Suppose that you are asked to evaluate whether more job training makes workers more productive. However, rather than having data on individual workers, you have access to data on manufacturing firms in Ohio. In particular, for each firm, you have information on hours of job training per worker (`training`) and the number of non-defective items produced per worker hour (`output`).
+
+1.  Carefully state the *ceteris paribus* thought experiment in the underlying policy statement described above.\
+    \
+    The above statement is c*eteris paribus* problem because other factors which affect the non-defective items produced are assumed to be fixed, we also assume on that statement that there are no other factors which can influence the number of the training given to the workers by the companies.
+
+2.  Does it seem likely that a firm\'s decision to train its workers will be independent of worker characteristics? Furthermore, what are some examples of measurable and immeasurable worker characteristics?\
+    \
+    No it might not. There are other worker characteristics both measurable and immeasurable which can affect the number of training which has been given by the firms. The examples of measurable characteristics are age, division, and job level while the immeasurable characteristics is the willingness of the workers. \
+
+3.  Name a couple of factors other than worker characteristics that can affect firm productivity.\
+    \
+    Firm productivity can also be affected by several factors such as: the technologies that are being used to produce the products, the flow of the production and the quality of raw materials\
+
+4.  If you find a positive correlation between `output` and `training`, would you have convincingly established that job training makes workers more productive? Explain.\
+    \
+    As long as the c*eteris paribus* is not violated, where the number of training is given independently regardless of the worker, it might be a useful conclusion.
+
+## **Problem 1.3**
+
+Suppose your university asks you to investigate the relationship between weekly hours spent studying (`study`) and weekly hours spent working (`work`). Does it make sense to characterize the problem as inferring whether `study` \"causes\" `work` or `work` \"causes\" `study`? Explain.\
+\
+It does not make sense. What we can do is that we can infer the association between work and study hours: whether the higher duration of the study reducing the work hours. However, there are other factors that could cause students working more than their peers. One of the is as the monthly allowance that they have. This factor (and other factors) can be eliminated if we could sample randomly the students so that we can have *ceteris paribus*.
+
+## **Problem 1.4**
+
+You need to use the data set called `WAGE1` in this exercise. Note that you can access all the data sets from Wooldridge (2018) by using the `wooldridge` package.
+
+```{r}
+library(wooldridge)
+names(wage1)
+
+```
+
+1.  Find the average education level in the sample. What are the lowest and highest years of education?
+
+    ```{r}
+    summary(wage1$educ)
+    ```
+
+    From above, we can see that the mean of the education level is 12.56 while the minimum and the maximum of the education level is 0.0 and 18.0 respectively.
+
+2.  Find the average hourly wage in the sample. Does it seem high or low?
+
+    ```{r}
+    summary(wage1$wage)
+    ```
+
+    From above, we can see that the mean of the wage 5.896. It is relatively low if we compare it to the maximum of the wage. However it is expected since the 50% of the samples have wage around 4.65.
+
+3.  How many people in the data set are married? How many are single?
+
+    ```{r}
+    paste0("Married sample: ", sum(wage1$married))
+    paste0("Single sample: ", length(wage1$married) - sum(wage1$married))
+    ```
+
+## **Problem 1.5**
+
+Use the data in `countymurders` to answer this question. Use only the year 1996. The variable `murders` is the number of murders reported in the county. The variable `execs` is the number of executions that took place of people sentenced to death in the given county. Most states in the United States have the death penalty, but several do not.
+
+```{r}
+#| warning: false
+library(tidyverse)
+filtered_countymurders <- countymurders |> filter(year==1996)
+```
+
+1.  How many counties are there in the data set? Of these, how many have zero murders? What percentage of counties have zero executions? (Remember, use only the 1996 data.)
+
+    ```{r}
+    paste0("Number of counties: ", n_distinct(filtered_countymurders$countyid))
+
+    zero_murder_counties <- filtered_countymurders |> 
+      filter(murders==0) |>
+      summarise(count = n())
+
+    paste0("Number of zero murders counties: ", (zero_murder_counties))
+
+    exec_pct <- filtered_countymurders |> 
+      group_by(execs) |> 
+      summarise(count = n()) |> 
+      mutate(freq = round(count/sum(count)*100,3))
+
+    paste0("Percentage of zero exec counties: ", (exec_pct |> filter(execs==0))$freq, "%")
+
+    ```
+
+2.  What is the largest number of murders? What is the largest number of executions? Compute the average number of executions.
+
+    ```{r}
+    paste0("Largest number of murders: ", max(filtered_countymurders$murders))
+    paste0("Largest number of executions: ", max(filtered_countymurders$execs))
+    paste0("Average(mean) number of murders: ", round(mean(filtered_countymurders$execs), 3))
+    ```
+
+3.  Compute the correlation coefficient between `murders` and `execs` and describe what you find.
+
+    ```{r}
+    paste0("Correlation between murders and execs: ", round(cor(filtered_countymurders$murders, filtered_countymurders$execs),4))
+    ```
+
+    As we can see, the correlation we can see a weak positive association (+0.21) between the number of murders and the number of executions from 1996 county murders data.
+
+4.  You should have computed a positive correlation in part 3. Do you think that more executions *cause* more murders to occur? What might explain the positive correlation?\
+    \
+    In reality it should be not. What can be said is that there might be reverse causality where the higher number of murders leads to the increment of the number of the executions. In addition, the positive correlation does not exactly indicate the causal relationship between the two. It only takes account the linear relationship between the two variables which in this case is positively correlated.
