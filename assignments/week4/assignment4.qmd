@@ -1,0 +1,317 @@
+---
+title: "assignment4"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+```{r}
+#| warning: false
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+ceo_sal_data = ceosal1
+soda_disc_data = discrim
+wage_data = wage2
+net_wealth_data = k401ksubs
+```
+
+## Problem 4.1
+
+Consider an equation that explains salaries of CEOs in terms of annual firm sales, return on equity ($roe$ in percentage form), and return on the firm's stock ($ros$ in percentage form):
+
+\begin{align}
+\log(salary) = \beta_0 + \beta_1 \log(sales) + \beta_2 roe + \beta_3 ros + u,
+\end{align} where $u$ is the error term.
+
+1.  In terms of the model parameters, state the null hypothesis that, after controlling for $sales$ and $roe$, $ros$ has no effect on CEO salary. State the alternative that better stock market performance increases a CEO's salary.\
+    \
+    The hypothesis would be:\
+    \begin{align}
+    H_{0}: \beta_{3} = 0 \\H_{1}: \beta_{3} > 0
+    \end{align}
+
+2.  Using the data in `ceosal1`, the following model was estimated by OLS: \begin{align}
+    \widehat{\log(salary)} &= \underset{(.32)}{4.23} + \underset{.035}{.280}\log(sales) + \underset{.0041}{.0174}roe + \underset{.00054}{.00024}ros \\
+    n &= 209, R^2 = .283
+    \end{align} By what percentage is $salary$ predicted to increase if $ros$ increases by 50 points? Would you say $ros$ has a large effect on salary?\
+    \
+    If ros increases by 50 points, then the salary of the ceo will increase (50\*100\*0.00024)% = 1.2% which is relatively small. The 50 points increase in ros is economically big.\
+
+3.  Test the null hypothesis that $ros$ has no effect on salary against the alternative that $ros$ has a positive effect. Carry out the test at the 10% significance level.
+
+    Based on the provided SE of the $\beta_{3}$, which is .00054, that we can have the t-statistic = (0.00024-0/0.00054) = 0.44. Since the alternative hypothesis is bigger than zero, we have one-sided test. For 10% significance level, the critical point with df (209-3-1) = 205 is :
+
+    ```{r}
+    critical_pt <- qt(p = 0.95, df = 205, lower.tail = TRUE)
+
+    paste0("Critical point: ", critical_pt)
+    ```
+
+    We can see that the t-value of ros is lesser than the critical point. Hence, we can not reject the null hypothesis at 10% significance level.
+
+4.  Would you include $ros$ in a final model explaining CEO compensation in terms of firm performance? Explain.\
+    \
+    Yes I will. Although Based on the previous test, we are not sure that whether the ros could affect the log(salary) of the ceo at 10% confidence interval, this might be due to sampling error. It still make sense to include it since the larger the stock price, the larger the salary since the stock price usually represents company performance and if the company performance is good, the ceo might receive additional bonus.
+
+## Problem 4.2
+
+Use the data set in `discrim` to answer this question. These are ZIP code-level data on prices for various items at fast-food restaurants, along with characteristics of the zip code population, in New Jersey and Pennsylvania.
+
+1.  Find the average values of $prpblck$ and $income$ in the sample, along with their standard deviations. What are the units of measurement of $prpblck$ and $income$?
+
+    ```{r}
+    paste0("Average value of prpblck(%): ", round(mean(soda_disc_data$prpblck, na.rm=TRUE),3))
+    paste0("SD value of prpblck(%): ", round(sd(soda_disc_data$prpblck, na.rm=TRUE),3))
+
+    paste0("Average value of income($): ", round(mean(soda_disc_data$income, na.rm=TRUE),3))
+    paste0("SD value of income($): ", round(sd(soda_disc_data$income, na.rm=TRUE),3 ))
+    ```
+
+2.  Consider a model that explains the price of soda, $psoda$, in terms of the proportion of the population that is black and median income: \begin{align}
+    psoda = \beta_0 + \beta_1 prpblck + \beta_2 income + u.
+    \end{align} Estimate this model by OLS and report the results in equation form, including the sample size, $R^2$ and standard errors. Interpret the coefficient on $prpblck$. Do you think it is economically large?
+
+    ```{r}
+    #| warning: false
+
+    psoda_model1 = lm(data = soda_disc_data, 
+                      formula = psoda ~ prpblck + income)
+
+    stargazer(psoda_model1, type = "text")
+    ```
+
+    From the result above, the $\hat{\beta_{1}}=0.115$ which means one percent increase (0.01) in the black race proportion in an are correspond to the increment of \$ 0.00115 of the soda price. This is economically huge since it can drastically shift the low prpblack region soda price (e.g. 50% increase could have \$0.0575 difference).
+
+3.  Compare the estimate from question 2 with the simple regression estimate from $psoda$ on $prpblck$. Is the discrimination effect larger or smaller when you control for income?
+
+    ```{r}
+    #| warning: false
+
+    psoda_model2 = lm(data = soda_disc_data, 
+                      formula = psoda ~ prpblck)
+
+    stargazer(psoda_model2, type = "text")
+    ```
+
+    From the result above, the value of $\tilde{\beta_{1}}=0.065$ which is not the same as the previous estimation. It means that there is a bias when we drop the $income$ from our model. In addition, there is a negative bias and since $\tilde{\beta_{1}}$ is lesser than $\hat{\beta_{1}}$ . Finally, the two are negatively correlated since the $\hat{\beta_{2}}$ is positive.
+
+4.  A model with a constant price elasticity with respect to income may be more appropriate. Report estimates of the model: \begin{align}
+    \log(psoda) = \beta_0 + \beta_1 prpblck + \beta_2 \log(income) + u.
+    \end{align} If $prpblck$ increases by $.20$ (20 percentage points), what is the estimated percentage change in $psoda$?
+
+    ```{r}
+    #| warning: false
+
+    psoda_model3 = lm(data = soda_disc_data, 
+                      formula = log(psoda) ~ prpblck + log(income))
+
+    stargazer(psoda_model3, type = "text")
+    ```
+
+    From the result above, if $prpblck$ increase by .20, then the price of soda will increase by 2.44% (100\*0.122\*0.2) which is more realistically than the previous model.
+
+5.  Now add the variable $prppov$ to the regression in part 4. What happens to $\widehat{\beta}_{prpblck}$?
+
+    ```{r}
+    #| warning: false
+
+    psoda_model3 = lm(data = soda_disc_data, 
+                      formula = log(psoda) ~ prpblck + log(income) + prppov)
+
+    stargazer(psoda_model3, type = "text")
+
+    ```
+
+    From the result above the $\widehat{\beta}_{prpblck}$ is higher than the previous estimation. This can be due to the bias when not including the $\beta_{prpblck}$ .
+
+6.  Find the correlation between $\log(income)$ and $prppov$. Is it roughly what you expected?\
+    For this case, I expect that there will be a negative correlation between the two. To prove my hypothesis, I regress $\log(income)$ on $prppov$.
+
+    ```{r}
+    #| warning: false
+
+    cor(x = soda_disc_data$lincome, y = soda_disc_data$prppov,
+        use = "complete.obs")
+
+    ```
+
+    From the result above, we can see that the two are highly negatively correlated with -0.84 correlation coefficient which makes sense.
+
+7.  Evaluate the following statement: "Because $log(income)$ and $prppov$ are so highly correlated, they have no business being in the same regression." Is the statement appropriate?
+
+    It is false. Since the OLS estimator is still unbiased as long as the two are not perfectly correlated, adding log(income) could help our OLS assumption where $E[u|\textbf{x}]=0$.
+
+## Problem 4.3
+
+Use the data set in `wage2` for this exercise.
+
+1.  Consider the standard wage equation \begin{align}
+    \log(wage) = \beta_0 + \beta_1 educ + \beta_2 exper + \beta_3 tenure + u.
+    \end{align} State the null hypothesis that another year of general workforce experience has the same effect on $\log(wage)$ as another year of tenure with the current employer.\
+    \
+    The hypothesis would be:\
+    \begin{align}
+    H_{0}: \beta_{2} = \beta_{3} 
+    \end{align}
+
+2.  Test the null hypothesis in 1 against a two-sided alternative at the 5% significance level by constructing a 95% confidence interval. What do you conclude?
+
+    ```{r}
+
+    #| warning: false
+
+    wage_model1 = lm(data = wage_data, 
+                     formula = log(wage) ~ educ + exper + tenure)
+
+    wage_model1_summary <- summary(wage_model1)
+    coeff_est <- wage_model1_summary$coefficients
+
+    b_est_exper <- coeff_est[3,1]
+    b_est_tenure <- coeff_est[4,1]
+    # since se(b1-b2) != se(b1) - se(b2) we use vcov: 
+    vcov_wage_model <- vcov(wage_model1_summary)
+    var_diff <- vcov_wage_model["exper", "exper"] + vcov_wage_model["tenure", "tenure"] - 2 * vcov_wage_model["exper", "tenure"]
+
+    se_diff <- sqrt(var_diff)
+
+    t_val <- (b_est_exper - b_est_tenure)/se_diff
+
+    t_test <- 2*pt(q = t_val, df = dim(wage_data)[1] - 3 - 1, lower.tail = FALSE)
+
+    paste0("T-test result: ", round(t_test,3))
+    ```
+
+    From the above result, we could reject the null hypothesis since the T-test result (0.681) is larger than our 0.05 significance level. Hence, we can confidently conclude that the $\beta_{2} \ne \beta_{3}$ assuming CLM.
+
+## Problem 4.4
+
+The data set `k401ksubs` contains information on net financial wealth ($nettfa$), age of the survey respondent ($age$), annual family income ($inc$), family size ($fsize$), and participation in certain pension plans for people in the United States. The wealth and income variables are both recorded in thousands of dollars. For this question, use only the data for single-person households (so $fsize = 1$).
+
+1.  How many single-person households are there in the data set?
+
+    ```{r}
+    net_wealth_data1 <- net_wealth_data |> 
+      filter(fsize==1)
+
+    net_wealth_data1 |> summarise(n())
+
+    ```
+
+2.  Use OLS to estimate the model \begin{align}
+    nettfa = \beta_0 + \beta_1 inc + \beta_2 age + u,
+    \end{align} and report the results using the usual format. Be sure to use only the single-person households in the sample. Interpret the slope coefficients. Are there any surprises in the slope estimates?
+
+    ```{r}
+    #| warning: false
+    wealth_model <- lm(data = net_wealth_data1, 
+                       formula = nettfa ~ inc + age)
+
+    wealth_model_summary <- summary(wealth_model) 
+
+    stargazer(wealth_model, type = "text")
+    ```
+
+    There is no surprising result from the prediction of slopes.
+
+3.  Does the intercept from the regression in part 2 have an interesting meaning? Explain.
+
+    From the above result, if all of the explanatory variables are zero, the wealth will be negative where it should be zero. However, this is not interesting since there will be no sample with such case.
+
+4.  Find the p-value for the test $H_0 : \beta_2 = 1$ against $H_1 : \beta_2 < 1$. Do you reject $H_0$ at the 1% significance level?
+
+    This can be answerd by $t_{\widehat{\beta_{2}}}=\frac{\widehat{\beta_{2}} - \beta_{2}}{se(\widehat{\beta_{2}})}$ with $df = 2014$
+
+    ```{r}
+    wealth_model_coeff <- wealth_model_summary$coefficients
+    b_2_est <- wealth_model_coeff[3,1]
+    b_2_est_sd <- wealth_model_coeff[3,2]
+
+    t_val = (b_2_est - 1)/b_2_est_sd 
+
+    #one sided 
+    t_test_result = pt(q = t_val, df = 2014, lower.tail = TRUE)
+    paste0("T-test result: ", round(t_test_result,3))
+    ```
+
+    As can be seen from the result, the result is less than our threshold of p-value which is 0.05. Hence, we might reject the null hypothesis. In summary, we can confidently conclude that $\beta_2 < 1$.
+
+5.  If you do a simple regression of $nettfa$ on $inc$, is the estimated coefficient on $inc$ much different from the estimate in part 2? Why or why not?
+
+    ```{r}
+    wealth_model2 <- lm(data = net_wealth_data1, 
+                       formula = nettfa ~ inc)
+
+    wealth_model2_summary <- summary(wealth_model2) 
+
+    stargazer(wealth_model2, type = "text")
+    ```
+
+    From the result above, the $\beta_{inc}$ is greater than previous estimation. This is due to there is a slightly positive bias when excluding the $age$ since the two are weakly correlated as shown below:
+
+    ```{r}
+    cor(net_wealth_data1$age, net_wealth_data1$inc)
+    ```
+
+## Problem 4.5
+
+Use the data in `discrim` to answer this question.
+
+1.  Use OLS to estimate the model \begin{align}
+    log(psoda) = \beta_0 + \beta_1 prpblck + \beta_2 log(income) + \beta_3 prppov + u,
+    \end{align} and report the results in the usual form (table). Is $\beta_1$ statistically different from zero at the 5% level against a two-sided alternative? What about at the 1% level?
+
+    ```{r}
+    soda_model2 = lm(data = soda_disc_data,
+                     formula = log(psoda) ~ prpblck + log(income) + prppov)
+
+    soda_model2_summary = summary(soda_model2)
+    soda_model2_coeff = soda_model2_summary$coefficients
+
+    stargazer(soda_model2_coeff, type = "text")
+    ```
+
+    From the result above, we can see that the t-test for prpblack resulted in 0.018 p-value which is less than 5% but not for 1% level. Hence, we can reject the null hypothesis only with 95% confidence interval.
+
+2.  What is the correlation between $\log(income)$ and $prppov$? Is each variable statistically significant in any case? Report the two-sided p-values.
+
+    ```{r}
+    cor_result <- cor(log(soda_disc_data$income), soda_disc_data$prppov, use = "complete.obs")
+
+    paste0("Correlation of log(income) and prppov: ", round(cor_result, 3))
+    ```
+
+    The two are highly negatively correlated. From the previous parameter estimation, both log(income) and prppov are statistically significant with 0 and 0.003 p-value respectively.
+
+3.  To the regression in part 1, add the variable $log(hseval)$. Interpret its coefficient and report the two-sided p-value for $H_0 : \beta_{log(hseval)} = 0$.
+
+    ```{r}
+    soda_model2 <- lm(data = soda_disc_data,
+                     formula = log(psoda) ~ prpblck + log(income) + prppov + log(hseval))
+
+    soda_model2_summary<-summary(soda_model2)
+    soda_model2_coeff <- soda_model2_summary$coefficients
+
+    stargazer(soda_model2_coeff, type = "text")
+    ```
+
+    From the estimation result, for any 1% increase of the median housing value, it will increase 0.12% of the soda price.
+
+    In addition, the two-sided p-value is very small (displayed 0) which is below our threshold (0.05). Hence, we can confidently reject the null hypothesis $H_0 : \beta_{log(hseval)} = 0$ with very high confidence interval.
+
+4.  In the regression in part 3, what happens to the individual statistical significance of $\log(income)$ and $prppov$? Are these variables jointly significant (compute a p-value)? What do you make of your answers?
+
+    From the previous estimation, the p-value for $\log(income)$ and $prppov$ are above our threshold (0.05) which means that we can not confidently reject the null hypothesis. \
+    To know whether the two are jointly wee need to calculate the resteriction model
+
+    ```{r}
+    soda_model2_r <- lm(data = soda_disc_data,
+                     formula = log(psoda) ~ prpblck + log(hseval))
+
+    anova(soda_model2, soda_model2_r)
+    ```
+
+    From the result above we could conclude that the two are not jointly significant. One of them should be not equal to zero
+
+5.  Given the results of the previous regressions, which one would you report as most reliable in determining whether the racial markup of a zip code influences local fast-food prices?\
+    The last regression give the best R-squared compared to others which indicates a "good" fit. In addition, economically, it makes sense that for every 1% increment of the prppov, it could increase 0.038% of the fast-food price when other factors are fixed which is low enough compared to previous regresions.

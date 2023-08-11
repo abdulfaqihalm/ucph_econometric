@@ -5,264 +5,133 @@ format: html
 editor: visual
 ---
 
-## **Problem 1.3 (extension from yesterday\'s exercise)**
+Today's exercises are based on Chapter 3 in Wooldridge (2018). Feel free to post questions either by [mail](mailto:cep@ifro.ku.dk) or the discussion forum [here](https://ucph.padlet.org/carlemilpless/questions-ehvgql4yj517uhb3). I will monitor both during the day and will be available for questions.
 
-Suppose your university asks you to investigate the relationship between weekly hours spent studying (study) and weekly hours spent working (work).
-
-1.  Does it make sense to characterize the problem as inferring whether study \"causes\" work or work \"causes\" study? Explain.\
-    \
-    No, it is not. The decision that someone chooses to study depends on several factors not only work but also the time to do exercise, having fun, and financial capability.
-
-2.  If you were to investigate the effect of studying on grade performance in terms of a simple linear regression model, how would you do so? After having found an associated $β$ with study, would we then have uncovered a causal relationship?\
-    \
-    Migh or migh not be. The correlation factor ($β$ ) does not tell us the causal relationship. It only tells the association of study and work.
-
-## **Problem 2.1**
-
-Let $kids$ denote the number of children born to woman $i$., and let $educ$ describe the years of education undergone by $i$. A simple model relating fertility to years of education can be put forth as $kids=β_{0}​+β_{1}​educ+u$,where $u$ is the unobserved error.
-
-1.  What kinds of factors are contained in $u$ ? Are these likely to be correlated with the level of education?\
-    \
-    There are several unobservable factors which might affect the kids that a woman that also correlates with the level of education such as the wage (more financially prepared), age (related to the fertility).
-
-2.  Will a simple regression analysis uncover the *ceteris paribus* effect of education on fertility? Explain.\
-    \
-    It might be if we let other factors are constant by choosing random sample of women from the population. However, in this case, since we know there are several factors which could affect $kids$ but correlated with education, we can not use the given simple regression.
-
-## **Problem 2.2**
-
-The following table contains the *ACT* scores and the *GPA* (grade point average) for eight college students. Grade point average is based on a four-point scale and has been rounded to one digit at the decimal.
-
-| Student | GPA | ACT |
-|:-------:|:---:|:---:|
-|    1    | 2.8 | 21  |
-|    2    | 3.4 | 24  |
-|    3    | 3.0 | 26  |
-|    4    | 3.5 | 27  |
-|    5    | 3.6 | 29  |
-|    6    | 3.0 | 25  |
-|    7    | 2.7 | 25  |
-|    8    | 3.7 | 30  |
-
-1.  Estimate the relationship between $GPA$ and $ACT$ using OLS; that is, obtain the intercept and slope estimates in the equation$\hat{GPA} = \hat{\beta_{0}} + \hat{\beta_{1}}ACT$.​​Comment on the direction of the relationship. Does the intercept have a useful interpretation here? Explain. How much higher is the $GPA$ predicted to be if the $ACT$ score is increased by five points?
-
-    ```{r}
-    #| warning: false
-    library(tidyverse)
-
-    student_data <- data.frame(Student = c(1:8), GPA = c(2.8,3.4,3.0,3.5,3.6,3.0,2.7,3.7), ACT = c(21, 24, 26, 27, 29, 25, 25, 30))
-
-    model <- lm(data = student_data, formula = GPA ~ ACT)
-    model_summary <- summary(model)
-    intercept <- round(model_summary$coefficients[1,1],3)
-    beta_1 <- round(model_summary$coefficients[2,1],3)
-
-    paste0("The intercept: ", intercept)
-    paste0("The correlation coefficient of ACT: ", beta_1)
-    ```
-
-    From the above result, we can see that the intercept is 0.568. It means that if the ACT score is zero, the GPA is 0.568 which is relative low, hence it makes sense. \
-    In addition, if the ACT increase by 5 pointes, than the GPA increase by (5\*0.102) = 0.51.
-
-2.  Compute the fitted values and residuals for each observation, and verify that the residuals (approximately) sum to zero.
-
-    ```{r}
-    estimated_model <- function(x){
-      y <- intercept + beta_1*x
-      return(y)
-    }
-
-    y_hat = estimated_model(student_data$ACT)
-    residuals = round(student_data$GPA - y_hat, 3)
-    paste0("Residuals: ", paste0(residuals, collapse = ", "))
-    paste0("Sum of residuals: ", sum(residuals))
-    ```
-
-    We can see from above result that the sum of residuals is pretty low (0.042) which validate the OLS assumption.
-
-3.  What is the predicted value of $GPA$ when $ACT=20$ ?
-
-    ```{r}
-    y_hat_20 = estimated_model(20)
-    paste0("Predicted GPA when ACT = 20: ", y_hat_20)
-    ```
-
-4.  How much of the variation in $GPA$ for these eight students is explained by $ACT$? Explain.
-It should be the $R^{2} = SSE/SST$. We can get it from our summary model: 
-    ```{r}
-    paste0("R-squared: ", round(model_summary$r.squared,3))
-    ```
-We can see that the model can explained 57.7% the total variance.
-
-## **Problem 2.3: The effectiveness of job training programs**
-
-Load the data set `jtrain2` related to a job training experiment in the 1970\'s. This data was used in a paper by R.J. Lalonde (1986), \"Evaluating the Econometric Evaluations of Training Programs with Experimental Data,\" American Economic Review 76, 604-620. Professor Lalonde obtained the data from the National Supported Work Demonstration job-training program conducted by the Manpower Demonstration Research Corporation in the mid 1970s. Training status was randomly assigned. Look at the description of the data set and answer the following questions
+Unless stated otherwise, the primary source of data we will be using is from the `wooldridge` package. Remember, you can access them directly in `R` with the following code:
 
 ```{r}
+#| eval: false
 library(wooldridge)
-
-jtrain2_data = jtrain2
+library(tidyverse)
 ```
 
-1.  What is the structure of this data set (see Wooldridge (2018), section 1.3)? Are the data observational or experimental? What do the observations (rows) in this data set represent?\
-    \
-    It is stated from the documentation that this data is experimental. The rows represent the worker in the experimental setting.\
+> As long as you have installed the `wooldridge` package using the `install.packages()` command.
 
-2.  Use the indicator variable $train$ to demonstrate the fraction of men receiving job training. Visualize and compare the number of men receiving job training and the number of men not receiving job training using a bar plot.
-
-    ```{r}
-    ggplot(jtrain2_data |>  
-             group_by(train) |> 
-             summarise(total = n()), 
-           mapping = aes(x = factor(train), y = total)) +
-      geom_bar(mapping = aes(fill = factor(train)), stat = "identity",
-               show.legend = FALSE) +
-      geom_text(mapping = aes(label = total), size = 3, 
-                vjust = 1.5, 
-                colour = "white") +
-      theme_bw() + 
-      labs(title = "Fraction of men receiving job",
-           x = "Train Status")
-    ```
-
-    From the figure above, the not-rained workers are 260 while the trained workers are 185. Hence the trained percentage is 41.57%.
-
-3.  The variable $$re78$$ is earnings from 1978, measured in thousands of 1982 dollars. What is the unconditional sample mean of $re78$? What is the conditional sample mean of $re78$ among those receiving job training? What is the conditional sample mean of $re78$ among those not receiving job training? Are the salaries in the two groups very different? Use a box plot to visualize and compare the distribution of $re78$ for the two groups
-
-    ```{r}
-    paste0("Unconditional sample mean of re78: ", round(mean(jtrain2_data$re78),3))
-    paste0("Conditional sample mean of re78 among receiving training: ", round(mean(jtrain2_data |> filter(train==1) |> pull(re78)),3))
-    paste0("Conditional sample mean of re78 among not receiving training: ", round(mean(jtrain2_data |> filter(train==0) |> pull(re78)),3))
-
-    ggplot(jtrain2_data |> filter(unem78==0), 
-           mapping = aes(x = factor(train), y = re78)) +
-      geom_boxplot(mapping = aes(fill = factor(train))) +
-      geom_jitter(color="black", size=0.4, alpha=0.4) +
-      theme_bw() + 
-      labs(title = "Distribution of wage in 1978",
-           x = "Train Status")
-    ```
-
-4.  The variable $unem78$ is an indicator of whether a man is unemployed or not in 1978. What fraction of the men who received job training are unemployed? What about the men who did not receive job training?
-
-    ```{r}
-    jtrain2_data |> 
-      filter() |> 
-      group_by(unem78, train) |> 
-      summarise(total = n(), .groups = "drop") |> 
-      mutate(pct = round(total/sum(total), 3))
-    ```
-
-    We can see that 20.7% (92) of the unemployed person in 1978 were not trained and the other 45 (32.8%) are not trained.
-
-5.  Based on your answers to questions 3 and 4, does it seem that the job training program was effective? What would make your conclusions more convincing?
-
-    From the question 4, it is compiling that the mean of the wage from the trained is higher than untrained worker. However, this mean difference should be taken carefully since the majority that trained workers were unemployed. We can make the conclusion better by excluding the unemployed workers.
-
-## **Problem 2.4: Birth weight and smoking habits**
-
-Start by loading the data set `bwght`, which is related to the smoking habits of mothers and the birth weight of their children. Look at the description of the variables and answer the following questions.
+Furthermore, it may be useful to call forth a description of the data set by running the following:
 
 ```{r}
-# Load data
+#| eval: false
+sleep_data = sleep75
+law_salary_data = lawsch85
 bwgs_data = bwght
 ```
 
-1.  What is the structure of this data set (see Wooldridge (2018), section 1.3)? Are the data observational or experimental? What do the observations (rows) in this data set represent?\
-    \
-    The data should be observational since it came from a survey. Each of the observation is a woman who gave birth to children.\
+## Problem 3.1
 
-2.  How many women (observations) are in the sample and how many report smoking during pregnancy?
+The following model is a simplified version of the multiple regression model used by Biddle and Hamermesh (1990) to study the tradeoff between time spent sleeping and working and to look at other factors affecting sleep:
 
-    ```{r}
-    paste0("Number of observations: ", length(bwgs_data$faminc))
-    paste0("Smoking during pregnancy: ", length(bwgs_data[bwgs_data$cigs!=0,]$cigs))
-    ```
+$$ sleep = \beta_0 + \beta_1 totwrk + \beta_2 educ + \beta_3 age + u,$$
 
-3.  What is the average number of cigarettes smoked per day? Illustrate the distribution of this variable graphically using a histogram (or similar). Is the average a good measure of the \"typical\" woman in this case? Explain.
+where $sleep$ and $totwrk$ (total work) are measured in minutes per week and $age$ and $educ$ are measured in years.
 
-    ```{r}
-    ggplot(data = bwgs_data, mapping = aes(x = cigs)) + 
-      geom_density(fill = "lightblue", alpha = 0.75, 
-                   color = "lightblue") +
-      theme_bw() + 
-      labs(title = "Distribution of Number of Cigarrets Smoked per Day",
-           subtitle = paste0("Average (mean): ", round(mean(bwgs_data$cigs),3)),
-           x = "Number of Cigarrets") 
-    ```
+1.  If adults trade off sleep for work, what is the sign of $\beta_1$?
 
-    The average of the smoked cigarettes per day is 2.087. However, this average can not be used as good indicator since lots of women were not smokers (\~84%) which had 0 number of smoked cigarettes per day. The showed average tends to "deviate" from the majority due to the property of the mean. We can make it better with "median" or excluding the non-smokers. 
+    it will be minus.
 
-4.  Among women who smoked during pregnancy, what is the average number of cigarettes smoked per day? How does this compare with your answer from question 3, and why?
+2.  What signs do you think $\beta_2$ and $\beta_3$ will have?\
+    For the age it will be positive since the older you are the more time of sleep you need. Meanwhile, for the education, it might be minus since the lesser
 
-    ```{r}
-    mean_smoked_women <- bwgs_data |> filter(cigs!=0) |> summarise(mean = mean(cigs)) |> pull(mean)
+3.  Using the data in `sleep75`, the estimated equation is \begin{align} \widehat{sleep} &= 3,638.25 - .148 totwrk -11.3 educ + 2.20 age \\
+    n &= 706, R^2 = .113
+    \end{align} If someone works five more hours per week, by how many minutes is $sleep$ predicted to decrease? Is this a large tradeoff?
 
-    paste0("Average (mean) number of cigarettes smoked per day for smoked women: ", round(mean_smoked_women ,3))
-    ```
+4.  Discuss the sign and magnitude of the estimated coefficient on $educ$.
 
-    From the result above, we can see that the average value is a way higher than the previous result. It is because we excluded the majority of the women from our sample which were non-smokers (80%).
+5.  Would you say $totwrk$, $educ$, and $age$ explain much of the variation in sleep? What other factors might affect the time spent sleeping? Are these likely to be correlated with $totwrk$?
 
-5.  Estimate the simple regression model: $bwght=β_{0}​+β_{1}​cigs+u$ ,​​where $u$ is the unobserved error. What are the estimates of $β_{0}$​ and $β_{1}$​?
+## Problem 3.2
 
-    ```{r}
-    bwght_model <- lm(data = bwgs_data, formula = bwght ~ cigs)
+The median starting salary for new law school graduates is determined by
 
-    bwght_model_summ <- summary(bwght_model)
+```{=tex}
+\begin{align}
+    \log(salary) = \beta_0 + \beta_1 LSAT + \beta_2 GPA + \beta_3 \log(libvol) + \beta_4 \log(cost) + \beta_5 rank + u,
+\end{align}
+```
+where $LSAT$ is the median $LSAT$ score for the graduating class, $GPA$ is the median college $GPA$ for the class, $libvol$ is the number of volumes in the law school library, $cost$ is the annual cost of attending law school, and $rank$ is a law school ranking (with $rank = 1$ being the best).
 
-    bwght_model_summ$coeff[,1]
+1.  Explain why we would expect $\beta_5 < 0$.
 
-    paste
-    ```
+2.  What signs do you expect for the other slope parameters? Justify your answers.
 
-    We can see that the $β_{0} = 119.8$​ and $β_{1} = -0.51$​ .
+3.  Using the data in `lawsch85`, the estimated equation becomes \begin{align}
+    \widehat{\log(salary)} &= 8.34 + .0047 LSAT + .248 GPA + .095 \log(libvol) \\
+                        &+.038 \log(cost) -.0033 rank \\
+                        n&=136, R^2 = .842
+    \end{align} What is the predicted *ceteris paribus* difference in salary for schools with a median $GPA$ difference by one point?
 
-6.  Illustrate the relationship between $cigs$ and $bwght$ in a scatter plot. Add the estimated regression line.
+4.  Interpret the coefficient on the variable $\log(libvol)$.
 
-    ```{r}
-    library(ggpmisc)
+5.  Would you say it is better to attend a higher-ranked law school? How much is the difference in ranking of 20 worth in terms of predicted starting salary?
 
-    ggplot(data = bwgs_data, mapping = aes(x = cigs, y = bwght)) + 
-      geom_point(color = "black", alpha = 0.2) +
-      stat_poly_line() +
-      stat_poly_eq(use_label(c("eq", "adj.R2"))) +
-      theme_bw() + 
-      labs(title = "Scatter Plot of Cigs and bwght and Its Estimated Regression Line",
-           x = "Number of Smoked Cigs per Day")
-    ```
+## Supplementary material 3.1: Deriving the OLS estimator
 
-7.  What is the predicted birth weight when $cigs=0$? What about when $cigs=20$ (one pack per day)? Comment on the difference.
+The following videos use a linear algebra version of the ordinary least squares (OLS) estimation procedure. In further econometrics courses, this is a common representation you will encounter. If you remember your matrix multiplication rules, it is a more elegant solution than the $k$ equations with $k$ unknowns presented in section 3.2f of Wooldridge (2018).
 
-    ```{r}
-    bwgs_model <- function(x) {
-      b_0 = bwght_model_summ$coeff[1,1]
-      b_1 = bwght_model_summ$coeff[2,1]
-      y = b_0 + b_1*x
-      return(round(y,3))
-    }
+## Problem 3.3
 
-    paste0("Predicted birth weight (cigs=0): ", bwgs_model(0))
+For this exercise, you will need to use the data set `bwght`. A problem of interest to health officials (and others) is determining the effects of smoking during pregnancy on infant health. One measure of infant health is birth weight; a birth weight that is too low can put an infant at risk of contracting various illnesses.
 
-    paste0("Predicted birth weight (cigs=20): ", bwgs_model(20))
-    ```
+Since factors other than cigarette smoking that affect birth weight are likely to be correlated with smoking, we should consider those factors. For example, higher income generally results in access to better prenatal care and better nutrition for the mother. An equation that recognizes this is:
 
-    We can see that when $cigs=20$, the predicted birth weight is smaller than $cigs=0$(non-smoker) which makes sense.
+```{=tex}
+\begin{align}
+bwght = \beta_0 + \beta_1 cigs + \beta_2 faminc + u,
+\end{align}
+```
+where $faminc$ is family income.
 
-8.  Does this simple regression necessarily capture a causal relationship between the child\'s birth weight and the mother\'s smoking habits? Explain.
+1.  What is the most likely sign of $\beta_2$?
 
-    No it does not. There are several reasons for it: First, we can see that the $R^{2}$ is relatively small (0.02) which indicates that the model poorly captures the variation of samples. Next, there might be also difference in the variances of the birthweight based on the number of smoked cigarettes per day, which indicates *heteroscedacity* (violate SLR.5). In addition, there might be several other factors which effect the birth weight of a beby such as the nutrition intake, age of the women which were not included on the model.
+2.  Do you think $cigs$ and $faminc$ are likely to be correlated? Explain why the correlation might be positive or negative.
 
-9.  To predict a birth weight of 125 ounces, what would $cigs$ have to be? Comment.
+3.  Now, estimate the equation with and without $faminc$, using the data in `bwght` (the data set we also used yesterday). Report the results in equation form, including the sample size and $R^2$. Discuss your results, focusing on whether adding $faminc$ substantially changes the estimated effect of $cigs$ on $bwght$.
 
-    ```{r}
-    bwgs_model_inverse <- function(y) {
-      b_0 = bwght_model_summ$coeff[1,1]
-      b_1 = bwght_model_summ$coeff[2,1]
-      x = (y - b_0)/b_1
-      return(round(x,3))
-    }
+## Problem 3.4
 
-    paste0("Based on the model, to predict 125 ounces of birth weight, the number of cigs should be: ", bwgs_model_inverse(125))
-    ```
+Use the data in `hprice1` to estimate the model:
 
-    We can see that from our model, to get relatively high birth weigth (125 ounces) we need to have \~-10 cigarettes smoked per day which does not make sense. We can only have 0 cigarettes minimum per day (non-smoker). This weird result might indicate that our model is not a good model.
+```{=tex}
+\begin{align}
+price = \beta_0 + \beta_1 sqrft + \beta_2 bdrms + u,
+\end{align}
+```
+where price is the price of the house measured in thousands of dollars.
+
+1.  Estimate the equation and write out the results in equation form.
+
+2.  What is the estimated increase in price for a house with one more bedroom, holding square footage constant?
+
+3.  What is the estimated increase in price for a house with an additional bedroom that is 140 square feet in size? Compare this to your answer in part 2.
+
+4.  What percentage of the variation in price is explained by square footage and number of bedrooms?
+
+5.  The first house in the sample has $sqrft = 2,438$ and $bdrms = 4$. Find the predicted selling price for this house from the OLS regression line.
+
+::: callout-tip
+Try taking a look at the `predict()` function.
+:::
+
+6.  The actual selling price of the **first** house in the sample was $300,000$ (so $price = 300$). Find the residual for this house. Does it suggest that the buyer underpaid or overpaid for the house?
+
+## Problem 3.5
+
+Use the data set in `wage2` for this problem. As usual, be sure all of the following regressions contain an intercept.
+
+1.  Run a simple regression of $IQ$ on $educ$ to obtain the slope coefficient, say $\widehat{\delta}_1$
+
+2.  Run the simple regression of $\log(wage)$ on $educ$, and obtain the slope coefficient, $\tilde{\beta}_1$.
+
+3.  Run the multiple regression of $\log(wage)$ on $educ$ and $IQ$ to obtain the slope coefficients $\widehat{\beta}_1$ and $\widehat{\beta}_2$, respectively.
+
+4.  Show that $\tilde{\beta}_1 = \widehat{\beta}_1 + \widehat{\beta}_2 \widehat{\delta}_1$. Explain your result.

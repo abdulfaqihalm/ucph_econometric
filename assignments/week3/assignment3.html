@@ -103,352 +103,114 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="problem-1.3-extension-from-yesterdays-exercise" class="level2">
-<h2 class="anchored" data-anchor-id="problem-1.3-extension-from-yesterdays-exercise"><strong>Problem 1.3 (extension from yesterday's exercise)</strong></h2>
-<p>Suppose your university asks you to investigate the relationship between weekly hours spent studying (study) and weekly hours spent working (work).</p>
+<p>Today’s exercises are based on Chapter 3 in Wooldridge (2018). Feel free to post questions either by <a href="mailto:cep@ifro.ku.dk">mail</a> or the discussion forum <a href="https://ucph.padlet.org/carlemilpless/questions-ehvgql4yj517uhb3">here</a>. I will monitor both during the day and will be available for questions.</p>
+<p>Unless stated otherwise, the primary source of data we will be using is from the <code>wooldridge</code> package. Remember, you can access them directly in <code>R</code> with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>As long as you have installed the <code>wooldridge</code> package using the <code>install.packages()</code> command.</p>
+</blockquote>
+<p>Furthermore, it may be useful to call forth a description of the data set by running the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sleep_data <span class="ot">=</span> sleep75</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>law_salary_data <span class="ot">=</span> lawsch85</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bwgs_data <span class="ot">=</span> bwght</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="problem-3.1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.1">Problem 3.1</h2>
+<p>The following model is a simplified version of the multiple regression model used by Biddle and Hamermesh (1990) to study the tradeoff between time spent sleeping and working and to look at other factors affecting sleep:</p>
+<p><span class="math display">\[ sleep = \beta_0 + \beta_1 totwrk + \beta_2 educ + \beta_3 age + u,\]</span></p>
+<p>where <span class="math inline">\(sleep\)</span> and <span class="math inline">\(totwrk\)</span> (total work) are measured in minutes per week and <span class="math inline">\(age\)</span> and <span class="math inline">\(educ\)</span> are measured in years.</p>
 <ol type="1">
-<li><p>Does it make sense to characterize the problem as inferring whether study "causes" work or work "causes" study? Explain.<br>
-<br>
-No, it is not. The decision that someone chooses to study depends on several factors not only work but also the time to do exercise, having fun, and financial capability.</p></li>
-<li><p>If you were to investigate the effect of studying on grade performance in terms of a simple linear regression model, how would you do so? After having found an associated <span class="math inline">\(β\)</span> with study, would we then have uncovered a causal relationship?<br>
-<br>
-Migh or migh not be. The correlation factor (<span class="math inline">\(β\)</span> ) does not tell us the causal relationship. It only tells the association of study and work.</p></li>
+<li><p>If adults trade off sleep for work, what is the sign of <span class="math inline">\(\beta_1\)</span>?</p>
+<p>it will be minus.</p></li>
+<li><p>What signs do you think <span class="math inline">\(\beta_2\)</span> and <span class="math inline">\(\beta_3\)</span> will have?<br>
+For the age it will be positive since the older you are the more time of sleep you need. Meanwhile, for the education, it might be minus since the lesser</p></li>
+<li><p>Using the data in <code>sleep75</code>, the estimated equation is <span class="math display">\[\begin{align} \widehat{sleep} &amp;= 3,638.25 - .148 totwrk -11.3 educ + 2.20 age \\
+n &amp;= 706, R^2 = .113
+\end{align}\]</span> If someone works five more hours per week, by how many minutes is <span class="math inline">\(sleep\)</span> predicted to decrease? Is this a large tradeoff?</p></li>
+<li><p>Discuss the sign and magnitude of the estimated coefficient on <span class="math inline">\(educ\)</span>.</p></li>
+<li><p>Would you say <span class="math inline">\(totwrk\)</span>, <span class="math inline">\(educ\)</span>, and <span class="math inline">\(age\)</span> explain much of the variation in sleep? What other factors might affect the time spent sleeping? Are these likely to be correlated with <span class="math inline">\(totwrk\)</span>?</p></li>
 </ol>
 </section>
-<section id="problem-2.1" class="level2">
-<h2 class="anchored" data-anchor-id="problem-2.1"><strong>Problem 2.1</strong></h2>
-<p>Let <span class="math inline">\(kids\)</span> denote the number of children born to woman <span class="math inline">\(i\)</span>., and let <span class="math inline">\(educ\)</span> describe the years of education undergone by <span class="math inline">\(i\)</span>. A simple model relating fertility to years of education can be put forth as <span class="math inline">\(kids=β_{0}​+β_{1}​educ+u\)</span>,where <span class="math inline">\(u\)</span> is the unobserved error.</p>
+<section id="problem-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.2">Problem 3.2</h2>
+<p>The median starting salary for new law school graduates is determined by</p>
+<span class="math display">\[\begin{align}
+    \log(salary) = \beta_0 + \beta_1 LSAT + \beta_2 GPA + \beta_3 \log(libvol) + \beta_4 \log(cost) + \beta_5 rank + u,
+\end{align}\]</span>
+<p>where <span class="math inline">\(LSAT\)</span> is the median <span class="math inline">\(LSAT\)</span> score for the graduating class, <span class="math inline">\(GPA\)</span> is the median college <span class="math inline">\(GPA\)</span> for the class, <span class="math inline">\(libvol\)</span> is the number of volumes in the law school library, <span class="math inline">\(cost\)</span> is the annual cost of attending law school, and <span class="math inline">\(rank\)</span> is a law school ranking (with <span class="math inline">\(rank = 1\)</span> being the best).</p>
 <ol type="1">
-<li><p>What kinds of factors are contained in <span class="math inline">\(u\)</span> ? Are these likely to be correlated with the level of education?<br>
-<br>
-There are several unobservable factors which might affect the kids that a woman that also correlates with the level of education such as the wage (more financially prepared), age (related to the fertility).</p></li>
-<li><p>Will a simple regression analysis uncover the <em>ceteris paribus</em> effect of education on fertility? Explain.<br>
-<br>
-It might be if we let other factors are constant by choosing random sample of women from the population. However, in this case, since we know there are several factors which could affect <span class="math inline">\(kids\)</span> but correlated with education, we can not use the given simple regression.</p></li>
+<li><p>Explain why we would expect <span class="math inline">\(\beta_5 &lt; 0\)</span>.</p></li>
+<li><p>What signs do you expect for the other slope parameters? Justify your answers.</p></li>
+<li><p>Using the data in <code>lawsch85</code>, the estimated equation becomes <span class="math display">\[\begin{align}
+\widehat{\log(salary)} &amp;= 8.34 + .0047 LSAT + .248 GPA + .095 \log(libvol) \\
+                    &amp;+.038 \log(cost) -.0033 rank \\
+                    n&amp;=136, R^2 = .842
+\end{align}\]</span> What is the predicted <em>ceteris paribus</em> difference in salary for schools with a median <span class="math inline">\(GPA\)</span> difference by one point?</p></li>
+<li><p>Interpret the coefficient on the variable <span class="math inline">\(\log(libvol)\)</span>.</p></li>
+<li><p>Would you say it is better to attend a higher-ranked law school? How much is the difference in ranking of 20 worth in terms of predicted starting salary?</p></li>
 </ol>
 </section>
-<section id="problem-2.2" class="level2">
-<h2 class="anchored" data-anchor-id="problem-2.2"><strong>Problem 2.2</strong></h2>
-<p>The following table contains the <em>ACT</em> scores and the <em>GPA</em> (grade point average) for eight college students. Grade point average is based on a four-point scale and has been rounded to one digit at the decimal.</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th style="text-align: center;">Student</th>
-<th style="text-align: center;">GPA</th>
-<th style="text-align: center;">ACT</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">2.8</td>
-<td style="text-align: center;">21</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">3.4</td>
-<td style="text-align: center;">24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">3.0</td>
-<td style="text-align: center;">26</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">3.5</td>
-<td style="text-align: center;">27</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">3.6</td>
-<td style="text-align: center;">29</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">6</td>
-<td style="text-align: center;">3.0</td>
-<td style="text-align: center;">25</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">2.7</td>
-<td style="text-align: center;">25</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">3.7</td>
-<td style="text-align: center;">30</td>
-</tr>
-</tbody>
-</table>
-<ol type="1">
-<li><p>Estimate the relationship between <span class="math inline">\(GPA\)</span> and <span class="math inline">\(ACT\)</span> using OLS; that is, obtain the intercept and slope estimates in the equation<span class="math inline">\(\hat{GPA} = \hat{\beta_{0}} + \hat{\beta_{1}}ACT\)</span>.​​Comment on the direction of the relationship. Does the intercept have a useful interpretation here? Explain. How much higher is the <span class="math inline">\(GPA\)</span> predicted to be if the <span class="math inline">\(ACT\)</span> score is increased by five points?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>student_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Student =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>), <span class="at">GPA =</span> <span class="fu">c</span>(<span class="fl">2.8</span>,<span class="fl">3.4</span>,<span class="fl">3.0</span>,<span class="fl">3.5</span>,<span class="fl">3.6</span>,<span class="fl">3.0</span>,<span class="fl">2.7</span>,<span class="fl">3.7</span>), <span class="at">ACT =</span> <span class="fu">c</span>(<span class="dv">21</span>, <span class="dv">24</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">29</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">30</span>))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> student_data, <span class="at">formula =</span> GPA <span class="sc">~</span> ACT)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">round</span>(model_summary<span class="sc">$</span>coefficients[<span class="dv">1</span>,<span class="dv">1</span>],<span class="dv">3</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="ot">&lt;-</span> <span class="fu">round</span>(model_summary<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">1</span>],<span class="dv">3</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"The intercept: "</span>, intercept)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "The intercept: 0.568"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"The correlation coefficient of ACT: "</span>, beta_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "The correlation coefficient of ACT: 0.102"</code></pre>
-</div>
-</div>
-<p>From the above result, we can see that the intercept is 0.568. It means that if the ACT score is zero, the GPA is 0.568 which is relative low, hence it makes sense.<br>
-In addition, if the ACT increase by 5 pointes, than the GPA increase by (5*0.102) = 0.51.</p></li>
-<li><p>Compute the fitted values and residuals for each observation, and verify that the residuals (approximately) sum to zero.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>estimated_model <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> intercept <span class="sc">+</span> beta_1<span class="sc">*</span>x</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(y)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">=</span> <span class="fu">estimated_model</span>(student_data<span class="sc">$</span>ACT)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">=</span> <span class="fu">round</span>(student_data<span class="sc">$</span>GPA <span class="sc">-</span> y_hat, <span class="dv">3</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Residuals: "</span>, <span class="fu">paste0</span>(residuals, <span class="at">collapse =</span> <span class="st">", "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Residuals: 0.09, 0.384, -0.22, 0.178, 0.074, -0.118, -0.418, 0.072"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Sum of residuals: "</span>, <span class="fu">sum</span>(residuals))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Sum of residuals: 0.042"</code></pre>
-</div>
-</div>
-<p>We can see from above result that the sum of residuals is pretty low (0.042) which validate the OLS assumption.</p></li>
-<li><p>What is the predicted value of <span class="math inline">\(GPA\)</span> when <span class="math inline">\(ACT=20\)</span> ?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_hat_20 <span class="ot">=</span> <span class="fu">estimated_model</span>(<span class="dv">20</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Predicted GPA when ACT = 20: "</span>, y_hat_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Predicted GPA when ACT = 20: 2.608"</code></pre>
-</div>
-</div></li>
-<li><p>How much of the variation in <span class="math inline">\(GPA\)</span> for these eight students is explained by <span class="math inline">\(ACT\)</span>? Explain. It should be the <span class="math inline">\(R^{2} = SSE/SST\)</span>. We can get it from our summary model:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"R-squared: "</span>, <span class="fu">round</span>(model_summary<span class="sc">$</span>r.squared,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "R-squared: 0.577"</code></pre>
-</div>
-</div></li>
-</ol>
-<p>We can see that the model can explained 57.7% the total variance.</p>
+<section id="supplementary-material-3.1-deriving-the-ols-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="supplementary-material-3.1-deriving-the-ols-estimator">Supplementary material 3.1: Deriving the OLS estimator</h2>
+<p>The following videos use a linear algebra version of the ordinary least squares (OLS) estimation procedure. In further econometrics courses, this is a common representation you will encounter. If you remember your matrix multiplication rules, it is a more elegant solution than the <span class="math inline">\(k\)</span> equations with <span class="math inline">\(k\)</span> unknowns presented in section 3.2f of Wooldridge (2018).</p>
 </section>
-<section id="problem-2.3-the-effectiveness-of-job-training-programs" class="level2">
-<h2 class="anchored" data-anchor-id="problem-2.3-the-effectiveness-of-job-training-programs"><strong>Problem 2.3: The effectiveness of job training programs</strong></h2>
-<p>Load the data set <code>jtrain2</code> related to a job training experiment in the 1970's. This data was used in a paper by R.J. Lalonde (1986), "Evaluating the Econometric Evaluations of Training Programs with Experimental Data," American Economic Review 76, 604-620. Professor Lalonde obtained the data from the National Supported Work Demonstration job-training program conducted by the Manpower Demonstration Research Corporation in the mid 1970s. Training status was randomly assigned. Look at the description of the data set and answer the following questions</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>jtrain2_data <span class="ot">=</span> jtrain2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="problem-3.3" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.3">Problem 3.3</h2>
+<p>For this exercise, you will need to use the data set <code>bwght</code>. A problem of interest to health officials (and others) is determining the effects of smoking during pregnancy on infant health. One measure of infant health is birth weight; a birth weight that is too low can put an infant at risk of contracting various illnesses.</p>
+<p>Since factors other than cigarette smoking that affect birth weight are likely to be correlated with smoking, we should consider those factors. For example, higher income generally results in access to better prenatal care and better nutrition for the mother. An equation that recognizes this is:</p>
+<span class="math display">\[\begin{align}
+bwght = \beta_0 + \beta_1 cigs + \beta_2 faminc + u,
+\end{align}\]</span>
+<p>where <span class="math inline">\(faminc\)</span> is family income.</p>
 <ol type="1">
-<li><p>What is the structure of this data set (see Wooldridge (2018), section 1.3)? Are the data observational or experimental? What do the observations (rows) in this data set represent?<br>
-<br>
-It is stated from the documentation that this data is experimental. The rows represent the worker in the experimental setting.<br>
-</p></li>
-<li><p>Use the indicator variable <span class="math inline">\(train\)</span> to demonstrate the fraction of men receiving job training. Visualize and compare the number of men receiving job training and the number of men not receiving job training using a bar plot.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jtrain2_data <span class="sc">|&gt;</span>  </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">group_by</span>(train) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">n</span>()), </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(train), <span class="at">y =</span> total)) <span class="sc">+</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">factor</span>(train)), <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">label =</span> total), <span class="at">size =</span> <span class="dv">3</span>, </span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="fl">1.5</span>, </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Fraction of men receiving job"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Train Status"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="assignment3_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>From the figure above, the not-rained workers are 260 while the trained workers are 185. Hence the trained percentage is 41.57%.</p></li>
-<li><p>The variable <span class="math display">\[re78\]</span> is earnings from 1978, measured in thousands of 1982 dollars. What is the unconditional sample mean of <span class="math inline">\(re78\)</span>? What is the conditional sample mean of <span class="math inline">\(re78\)</span> among those receiving job training? What is the conditional sample mean of <span class="math inline">\(re78\)</span> among those not receiving job training? Are the salaries in the two groups very different? Use a box plot to visualize and compare the distribution of <span class="math inline">\(re78\)</span> for the two groups</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Unconditional sample mean of re78: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(jtrain2_data<span class="sc">$</span>re78),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Unconditional sample mean of re78: 5.301"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Conditional sample mean of re78 among receiving training: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(jtrain2_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(train<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(re78)),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Conditional sample mean of re78 among receiving training: 6.349"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Conditional sample mean of re78 among not receiving training: "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(jtrain2_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(train<span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(re78)),<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Conditional sample mean of re78 among not receiving training: 4.555"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jtrain2_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(unem78<span class="sc">==</span><span class="dv">0</span>), </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(train), <span class="at">y =</span> re78)) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">factor</span>(train))) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">color=</span><span class="st">"black"</span>, <span class="at">size=</span><span class="fl">0.4</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of wage in 1978"</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Train Status"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="assignment3_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-</div></li>
-<li><p>The variable <span class="math inline">\(unem78\)</span> is an indicator of whether a man is unemployed or not in 1978. What fraction of the men who received job training are unemployed? What about the men who did not receive job training?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>jtrain2_data <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(unem78, train) <span class="sc">|&gt;</span> </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> <span class="fu">round</span>(total<span class="sc">/</span><span class="fu">sum</span>(total), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-  unem78 train total   pct
-   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
-1      0     0   168 0.378
-2      0     1   140 0.315
-3      1     0    92 0.207
-4      1     1    45 0.101</code></pre>
-</div>
-</div>
-<p>We can see that 20.7% (92) of the unemployed person in 1978 were not trained and the other 45 (32.8%) are not trained.</p></li>
-<li><p>Based on your answers to questions 3 and 4, does it seem that the job training program was effective? What would make your conclusions more convincing?</p>
-<p>From the question 4, it is compiling that the mean of the wage from the trained is higher than untrained worker. However, this mean difference should be taken carefully since the majority that trained workers were unemployed. We can make the conclusion better by excluding the unemployed workers.</p></li>
+<li><p>What is the most likely sign of <span class="math inline">\(\beta_2\)</span>?</p></li>
+<li><p>Do you think <span class="math inline">\(cigs\)</span> and <span class="math inline">\(faminc\)</span> are likely to be correlated? Explain why the correlation might be positive or negative.</p></li>
+<li><p>Now, estimate the equation with and without <span class="math inline">\(faminc\)</span>, using the data in <code>bwght</code> (the data set we also used yesterday). Report the results in equation form, including the sample size and <span class="math inline">\(R^2\)</span>. Discuss your results, focusing on whether adding <span class="math inline">\(faminc\)</span> substantially changes the estimated effect of <span class="math inline">\(cigs\)</span> on <span class="math inline">\(bwght\)</span>.</p></li>
 </ol>
 </section>
-<section id="problem-2.4-birth-weight-and-smoking-habits" class="level2">
-<h2 class="anchored" data-anchor-id="problem-2.4-birth-weight-and-smoking-habits"><strong>Problem 2.4: Birth weight and smoking habits</strong></h2>
-<p>Start by loading the data set <code>bwght</code>, which is related to the smoking habits of mothers and the birth weight of their children. Look at the description of the variables and answer the following questions.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>bwgs_data <span class="ot">=</span> bwght</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="problem-3.4" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.4">Problem 3.4</h2>
+<p>Use the data in <code>hprice1</code> to estimate the model:</p>
+<span class="math display">\[\begin{align}
+price = \beta_0 + \beta_1 sqrft + \beta_2 bdrms + u,
+\end{align}\]</span>
+<p>where price is the price of the house measured in thousands of dollars.</p>
 <ol type="1">
-<li><p>What is the structure of this data set (see Wooldridge (2018), section 1.3)? Are the data observational or experimental? What do the observations (rows) in this data set represent?<br>
-<br>
-The data should be observational since it came from a survey. Each of the observation is a woman who gave birth to children.<br>
-</p></li>
-<li><p>How many women (observations) are in the sample and how many report smoking during pregnancy?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Number of observations: "</span>, <span class="fu">length</span>(bwgs_data<span class="sc">$</span>faminc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Number of observations: 1388"</code></pre>
+<li><p>Estimate the equation and write out the results in equation form.</p></li>
+<li><p>What is the estimated increase in price for a house with one more bedroom, holding square footage constant?</p></li>
+<li><p>What is the estimated increase in price for a house with an additional bedroom that is 140 square feet in size? Compare this to your answer in part 2.</p></li>
+<li><p>What percentage of the variation in price is explained by square footage and number of bedrooms?</p></li>
+<li><p>The first house in the sample has <span class="math inline">\(sqrft = 2,438\)</span> and <span class="math inline">\(bdrms = 4\)</span>. Find the predicted selling price for this house from the OLS regression line.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Smoking during pregnancy: "</span>, <span class="fu">length</span>(bwgs_data[bwgs_data<span class="sc">$</span>cigs<span class="sc">!=</span><span class="dv">0</span>,]<span class="sc">$</span>cigs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Smoking during pregnancy: 212"</code></pre>
-</div>
-</div></li>
-<li><p>What is the average number of cigarettes smoked per day? Illustrate the distribution of this variable graphically using a histogram (or similar). Is the average a good measure of the "typical" woman in this case? Explain.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> bwgs_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cigs)) <span class="sc">+</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.75</span>, </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Number of Cigarrets Smoked per Day"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Average (mean): "</span>, <span class="fu">round</span>(<span class="fu">mean</span>(bwgs_data<span class="sc">$</span>cigs),<span class="dv">3</span>)),</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number of Cigarrets"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="assignment3_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<div class="callout-title-container flex-fill">
+Tip
 </div>
 </div>
-<p>The average of the smoked cigarettes per day is 2.087. However, this average can not be used as good indicator since lots of women were not smokers (~84%) which had 0 number of smoked cigarettes per day. The showed average tends to “deviate” from the majority due to the property of the mean. We can make it better with “median” or excluding the non-smokers.</p></li>
-<li><p>Among women who smoked during pregnancy, what is the average number of cigarettes smoked per day? How does this compare with your answer from question 3, and why?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mean_smoked_women <span class="ot">&lt;-</span> bwgs_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(cigs<span class="sc">!=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(cigs)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(mean)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Average (mean) number of cigarettes smoked per day for smoked women: "</span>, <span class="fu">round</span>(mean_smoked_women ,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Average (mean) number of cigarettes smoked per day for smoked women: 13.665"</code></pre>
+<div class="callout-body-container callout-body">
+<p>Try taking a look at the <code>predict()</code> function.</p>
 </div>
 </div>
-<p>From the result above, we can see that the average value is a way higher than the previous result. It is because we excluded the majority of the women from our sample which were non-smokers (80%).</p></li>
-<li><p>Estimate the simple regression model: <span class="math inline">\(bwght=β_{0}​+β_{1}​cigs+u\)</span> ,​​where <span class="math inline">\(u\)</span> is the unobserved error. What are the estimates of <span class="math inline">\(β_{0}\)</span>​ and <span class="math inline">\(β_{1}\)</span>​?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>bwght_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> bwgs_data, <span class="at">formula =</span> bwght <span class="sc">~</span> cigs)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>bwght_model_summ <span class="ot">&lt;-</span> <span class="fu">summary</span>(bwght_model)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>bwght_model_summ<span class="sc">$</span>coeff[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>(Intercept)        cigs 
-119.7719004  -0.5137721 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>paste</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>function (..., sep = " ", collapse = NULL, recycle0 = FALSE) 
-.Internal(paste(list(...), sep, collapse, recycle0))
-&lt;bytecode: 0x12e303f78&gt;
-&lt;environment: namespace:base&gt;</code></pre>
-</div>
-</div>
-<p>We can see that the <span class="math inline">\(β_{0} = 119.8\)</span>​ and <span class="math inline">\(β_{1} = -0.51\)</span>​ .</p></li>
-<li><p>Illustrate the relationship between <span class="math inline">\(cigs\)</span> and <span class="math inline">\(bwght\)</span> in a scatter plot. Add the estimated regression line.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpmisc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: ggpp</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'ggpp'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:ggplot2':
-
-    annotate</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> bwgs_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cigs, <span class="at">y =</span> bwght)) <span class="sc">+</span> </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_line</span>() <span class="sc">+</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"adj.R2"</span>))) <span class="sc">+</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scatter Plot of Cigs and bwght and Its Estimated Regression Line"</span>,</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number of Smoked Cigs per Day"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="assignment3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
-</div>
-</div></li>
-<li><p>What is the predicted birth weight when <span class="math inline">\(cigs=0\)</span>? What about when <span class="math inline">\(cigs=20\)</span> (one pack per day)? Comment on the difference.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>bwgs_model <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  b_0 <span class="ot">=</span> bwght_model_summ<span class="sc">$</span>coeff[<span class="dv">1</span>,<span class="dv">1</span>]</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  b_1 <span class="ot">=</span> bwght_model_summ<span class="sc">$</span>coeff[<span class="dv">2</span>,<span class="dv">1</span>]</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> b_0 <span class="sc">+</span> b_1<span class="sc">*</span>x</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">round</span>(y,<span class="dv">3</span>))</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Predicted birth weight (cigs=0): "</span>, <span class="fu">bwgs_model</span>(<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Predicted birth weight (cigs=0): 119.772"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Predicted birth weight (cigs=20): "</span>, <span class="fu">bwgs_model</span>(<span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Predicted birth weight (cigs=20): 109.496"</code></pre>
-</div>
-</div>
-<p>We can see that when <span class="math inline">\(cigs=20\)</span>, the predicted birth weight is smaller than <span class="math inline">\(cigs=0\)</span>(non-smoker) which makes sense.</p></li>
-<li><p>Does this simple regression necessarily capture a causal relationship between the child's birth weight and the mother's smoking habits? Explain.</p>
-<p>No it does not. There are several reasons for it: First, we can see that the <span class="math inline">\(R^{2}\)</span> is relatively small (0.02) which indicates that the model poorly captures the variation of samples. Next, there might be also difference in the variances of the birthweight based on the number of smoked cigarettes per day, which indicates <em>heteroscedacity</em> (violate SLR.5). In addition, there might be several other factors which effect the birth weight of a beby such as the nutrition intake, age of the women which were not included on the model.</p></li>
-<li><p>To predict a birth weight of 125 ounces, what would <span class="math inline">\(cigs\)</span> have to be? Comment.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>bwgs_model_inverse <span class="ot">&lt;-</span> <span class="cf">function</span>(y) {</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  b_0 <span class="ot">=</span> bwght_model_summ<span class="sc">$</span>coeff[<span class="dv">1</span>,<span class="dv">1</span>]</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  b_1 <span class="ot">=</span> bwght_model_summ<span class="sc">$</span>coeff[<span class="dv">2</span>,<span class="dv">1</span>]</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (y <span class="sc">-</span> b_0)<span class="sc">/</span>b_1</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">round</span>(x,<span class="dv">3</span>))</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Based on the model, to predict 125 ounces of birth weight, the number of cigs should be: "</span>, <span class="fu">bwgs_model_inverse</span>(<span class="dv">125</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Based on the model, to predict 125 ounces of birth weight, the number of cigs should be: -10.176"</code></pre>
-</div>
-</div>
-<p>We can see that from our model, to get relatively high birth weigth (125 ounces) we need to have ~-10 cigarettes smoked per day which does not make sense. We can only have 0 cigarettes minimum per day (non-smoker). This weird result might indicate that our model is not a good model.</p></li>
+<ol start="6" type="1">
+<li>The actual selling price of the <strong>first</strong> house in the sample was <span class="math inline">\(300,000\)</span> (so <span class="math inline">\(price = 300\)</span>). Find the residual for this house. Does it suggest that the buyer underpaid or overpaid for the house?</li>
+</ol>
+</section>
+<section id="problem-3.5" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.5">Problem 3.5</h2>
+<p>Use the data set in <code>wage2</code> for this problem. As usual, be sure all of the following regressions contain an intercept.</p>
+<ol type="1">
+<li><p>Run a simple regression of <span class="math inline">\(IQ\)</span> on <span class="math inline">\(educ\)</span> to obtain the slope coefficient, say <span class="math inline">\(\widehat{\delta}_1\)</span></p></li>
+<li><p>Run the simple regression of <span class="math inline">\(\log(wage)\)</span> on <span class="math inline">\(educ\)</span>, and obtain the slope coefficient, <span class="math inline">\(\tilde{\beta}_1\)</span>.</p></li>
+<li><p>Run the multiple regression of <span class="math inline">\(\log(wage)\)</span> on <span class="math inline">\(educ\)</span> and <span class="math inline">\(IQ\)</span> to obtain the slope coefficients <span class="math inline">\(\widehat{\beta}_1\)</span> and <span class="math inline">\(\widehat{\beta}_2\)</span>, respectively.</p></li>
+<li><p>Show that <span class="math inline">\(\tilde{\beta}_1 = \widehat{\beta}_1 + \widehat{\beta}_2 \widehat{\delta}_1\)</span>. Explain your result.</p></li>
 </ol>
 </section>
 
