@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Abdullah Faqih Al Mubarok">
+
+<title>assignment6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="01_notebook06_files/libs/clipboard/clipboard.min.js"></script>
+<script src="01_notebook06_files/libs/quarto-html/quarto.js"></script>
+<script src="01_notebook06_files/libs/quarto-html/popper.min.js"></script>
+<script src="01_notebook06_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="01_notebook06_files/libs/quarto-html/anchor.min.js"></script>
+<link href="01_notebook06_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="01_notebook06_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="01_notebook06_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="01_notebook06_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="01_notebook06_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">assignment6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Abdullah Faqih Al Mubarok </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>softdrink_data <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="fu">load</span>(<span class="st">"softdrink.RData"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="problem-6.1-obesity-rates" class="level2">
+<h2 class="anchored" data-anchor-id="problem-6.1-obesity-rates">Problem 6.1: Obesity rates</h2>
+<p>Data from OECD shows that the rate of obesity in Denmark reached <span class="math inline">\(13.5\%\)</span> in 2010. This corresponds to an increase of approximately <span class="math inline">\(18\%\)</span> compared to 2005 and a <span class="math inline">\(150\%\)</span> rise since 1987. This places Denmark below the average level in OECD countries but above the level for comparable countries like Sweden and Norway. The rise in obesity seems to be larger among younger and less educated individuals.</p>
+<p>Even though obesity, to a large extent, is thought to be the outcome of an individual decision process, politicians must also consider the impact of these private decisions on society. Extreme obesity is correlated with many lifestyle-related illnesses, and it, therefore, poses a large burden on healthcare systems. More importantly, it impacts society in countries with publicly financed healthcare systems (like Denmark) since obese individuals pay the same to the healthcare system as non-obese individuals that do not have the same healthcare needs. Politicians, therefore, have a direct interest in reducing obesity. Several lifestyle factors seem to have contributed to the obesity epidemic during the last decades: The price of food, especially unhealthy foods, has declined, the amount of sedentary work has increased, and the use of electrical equipment and private cars has expanded.</p>
+<p>The political system is searching for ways to reduce the problem. One way to do this is to consider using economic instruments to change people’s lifestyles and reduce, e.g., the consumption of unhealthy foods like soft drinks. The increasing consumption of soft drinks is an essential cause of the increased prevalence of obesity. In this assignment, you will investigate the lifestyle behavior of different household groups regarding soft drink consumption and the potential for politicians to change this behavior by imposing economic (tax) instruments.</p>
+<section id="data-description" class="level3">
+<h3 class="anchored" data-anchor-id="data-description">Data description</h3>
+<p>The data set is called <code>softdrink.RData</code> and is available <a href="https://absalon.ku.dk/courses/67218/files/7319806?module_item_id=2070374">here</a>. It is a subset of a larger data set from the research company GfK ConsumerTracking Scandinavia which covers approximately 2500 consumers that, every week, report their purchase of everyday staples like food for in-house consumption. The respondents select themselves into the panel. The purchases are registered by the household member who is mainly responsible for shopping. The data set covers aggregate food and soft drink expenditures in 2004. The data set also includes household characteristics aggregated into monthly observations. That is, each observation of purchases is from a select week. The data set contains the following variables:</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>volpers</code></td>
+<td>volume of soda per person in household</td>
+</tr>
+<tr class="even">
+<td><code>soft</code></td>
+<td><span class="math inline">\(=1\)</span> if soda has been bought in a given month, 0 otherwise</td>
+</tr>
+<tr class="odd">
+<td><code>price</code></td>
+<td>average price paid for soda in a month</td>
+</tr>
+<tr class="even">
+<td><code>totfoodpers</code></td>
+<td>total food expenditure per person</td>
+</tr>
+<tr class="odd">
+<td><code>age</code></td>
+<td>age in years for the primary shopper</td>
+</tr>
+<tr class="even">
+<td><code>single</code></td>
+<td><span class="math inline">\(=1\)</span> if the household consists of a single adult, 0 otherwise</td>
+</tr>
+<tr class="odd">
+<td><code>capital</code></td>
+<td><span class="math inline">\(=1\)</span> if households lives in capital area, 0 otherwise</td>
+</tr>
+<tr class="even">
+<td><code>urban</code></td>
+<td><span class="math inline">\(=1\)</span> if households lives in urban area, 0 otherwise</td>
+</tr>
+<tr class="odd">
+<td><code>rural</code></td>
+<td><span class="math inline">\(=1\)</span> if households lives in rural area, 0 otherwise</td>
+</tr>
+<tr class="even">
+<td><code>high_edu</code></td>
+<td><span class="math inline">\(=1\)</span> if primary shopper has a higher education, 0 otherwise</td>
+</tr>
+<tr class="odd">
+<td><code>kid06</code></td>
+<td><span class="math inline">\(=1\)</span> if there are kids between 0 and 6, 0 otherwise</td>
+</tr>
+<tr class="even">
+<td><code>kid714</code></td>
+<td><span class="math inline">\(=1\)</span> if there are kids between 7 and 14, 0 otherwise</td>
+</tr>
+<tr class="odd">
+<td><code>kid1520</code></td>
+<td><span class="math inline">\(=1\)</span> if there are kids between 15 and 20, 0 otherwise</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Start by loading the data set. Note that the environment is called <code>students</code> and not <code>data.</code> Therefore, I changed the name in the following code snippet:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"softdrink.RData"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> students</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercises" class="level3">
+<h3 class="anchored" data-anchor-id="exercises">Exercises</h3>
+<p>Please answer the following questions:</p>
+<ol type="1">
+<li><p>Provide a table with all the variables in the data set. What type of data are we working with? Explain.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(softdrink_data, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+=======================================================
+Statistic     N      Mean    St. Dev.  Min      Max    
+-------------------------------------------------------
+age         27,316  54.849    14.346    18       98    
+single      27,316   0.385    0.487     0        1     
+price       27,316   7.408    2.751   0.595    51.745  
+soft        27,316   0.508    0.500     0        1     
+capital     27,316   0.242    0.428     0        1     
+urban       27,316   0.432    0.495     0        1     
+rural       27,316   0.325    0.468     0        1     
+high_edu    27,316   0.215    0.411     0        1     
+volpers     27,316   0.283    0.558   0.000    16.733  
+kid06       27,316   0.081    0.273     0        1     
+kid714      27,316   0.130    0.336     0        1     
+kid1520     27,316   0.119    0.323     0        1     
+totfoodpers 27,316 1,042.267 838.306  16.000 13,097.200
+-------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>We have a data which contains non-experimental data. This data consists of dummy variables(soft, single, capita, urban, rural, high_edu, kid06, kid714, kid1520) and numerical variables(volpers, price, totfoodpers, age).</p></li>
+<li><p>What do you think are the main sources of errors in this type of data in relation to soft drink consumption? For instance, what problems may arise as a result of self-selection? Discuss.</p>
+<p>The first error that I noticed is the way the data was collected. The data was self-selected which might be introduces exogenous variables due to not randomly selected samples.<br>
+In addition, the data was counted based on the selected member of household. This still have a leak if the members of the household didn’t report completely about their purchase e.g.&nbsp;when a member bought soda at work.<br>
+Aside that, it seems that the volume of consumption is the average of each household which seems that can be redundant e.g.&nbsp;if a household consists of two adults and one child where the child is only the consumer of soda, per person may be not to large by if it is per person, the child consumption will be large.</p></li>
+<li><p>Draw and present a histogram of the age distribution for the main shopping responsible. Do you think it is representative of the Danish population?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> softdrink_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age)) <span class="sc">+</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">color =</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Age on The Data"</span>) <span class="sc">+</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(density)` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="01_notebook06_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the data above we can see that the majority of the responded on the data is in the range of 57 years old. This not reflects the reality of the age distribution of Denmark population since it has to be flat. It might be the selection bias of this study.</p></li>
+<li><p>Calculate the mean consumption for singles with <span class="math inline">\(age&lt;35\)</span>, singles between 35 and 50, singles between 50 and 70, and singles above 70, and the same for couples (in total, eight different conditional sample means).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>softdrink_data <span class="ot">&lt;-</span> softdrink_data <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">categ =</span> <span class="fu">case_when</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&lt;</span><span class="dv">35</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">"single_under_35"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">35</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span><span class="dv">50</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">"single_b/w_35_50"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">50</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span><span class="dv">70</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">"single_b/w_50_70"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">70</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">"single_above_70"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&lt;</span><span class="dv">35</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"married_under_35"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">35</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span><span class="dv">50</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"married_b/w_35_50"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">50</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span><span class="dv">70</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"married_b/w_50_70"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    age<span class="sc">&gt;</span><span class="dv">70</span> <span class="sc">&amp;</span> single<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"married_above_70"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>softdrink_data <span class="sc">|&gt;</span> </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(categ) <span class="sc">|&gt;</span> </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_consumption =</span> <span class="fu">mean</span>(volpers)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_consumption))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  categ             mean_consumption
+  &lt;chr&gt;                        &lt;dbl&gt;
+1 single_under_35              0.382
+2 &lt;NA&gt;                         0.369
+3 single_b/w_35_50             0.344
+4 married_under_35             0.306
+5 single_b/w_50_70             0.298
+6 married_b/w_35_50            0.288
+7 married_b/w_50_70            0.269
+8 married_above_70             0.201
+9 single_above_70              0.197</code></pre>
+</div>
+</div>
+<p>From the result obove, we can see that the younger group, which is under 35, for single and married are on the first and third respectively.</p></li>
+<li><p>Who are the largest consumers of soft drinks? Is this what you expected?</p>
+<p>single and under under 35, is the largest consumer of soft drinkk. This <em>might</em> indicate that the consumption of soda on the younger age is relatively bigger than the other age groups as stated on the introduction. However, we have to be careful with the above result since the non-single groups might be underestimate due to averaged consumption.</p></li>
+<li><p>Calculate the frequency of zero purchases of soft drinks in each of the eight groups and comment on the results in relation to question 3. (Remember that the variable <code>soft</code> is a dummy indicating whether the household purchased soft drinks or not in a given month).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>softdrink_data <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(soft<span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(categ) <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq =</span> <span class="fu">round</span>((n<span class="sc">/</span><span class="fu">sum</span>(n)),<span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(freq))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  categ                 n  freq
+  &lt;chr&gt;             &lt;int&gt; &lt;dbl&gt;
+1 married_b/w_50_70  3933 0.292
+2 single_b/w_50_70   2511 0.187
+3 married_b/w_35_50  1886 0.14 
+4 single_above_70    1394 0.104
+5 single_b/w_35_50   1115 0.083
+6 married_above_70    823 0.061
+7 married_under_35    816 0.061
+8 &lt;NA&gt;                576 0.043
+9 single_under_35     395 0.029</code></pre>
+</div>
+</div>
+<p>As expected, the three biggest non soda consumer groups are the older groups (in this case, people between 50-70). However, I expected that the two biggest are the groups above 70 instead of those 50-70 groups. This might be due to bias on the data collection which resulted on bias self-report from the older groups especially people who were above 70 years old.</p></li>
+<li><p>Now remove all observations that have not purchased any soda. As we assume that the consumption of soft drinks in liters per person is to some extent determined by the price, the age and education of the household member who is mainly responsible for shopping, how much the household spends on food per person, the number of kids in the household, urbanity, and single status, we assume the following model for the population: <span class="math display">\[\begin{align}
+\log(volpers)&amp;=\beta_0 + \beta_1\log(price) + \beta_2age + \beta_3 age^2 + \beta_4 kid06 + \beta_5 kid714 \\ &amp;+ \beta_6 kid1520 + \beta_7capital + \beta_8 urban + \beta_9 single + \beta_{10} \log(totfoodpers) + u.
+\end{align}\]</span> Estimate the model and report your results in equation form, with corresponding standard errors, the number of observations, and <span class="math inline">\(R^2\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>softdrink_model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> softdrink_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(soft<span class="sc">==</span><span class="dv">1</span>), </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">formula =</span> <span class="fu">log</span>(volpers) <span class="sc">~</span> <span class="fu">log</span>(price) <span class="sc">+</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                         age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> kid06 <span class="sc">+</span> kid714 <span class="sc">+</span> kid1520 <span class="sc">+</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                         capital <span class="sc">+</span> urban <span class="sc">+</span> single <span class="sc">+</span> <span class="fu">log</span>(totfoodpers) </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                         )</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>summary_softdrink_model1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(softdrink_model1)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(softdrink_model1, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                           log(volpers)        
+-----------------------------------------------
+log(price)                   -0.842***         
+                              (0.018)          
+
+age                          0.046***          
+                              (0.004)          
+
+I(age2)                     -0.0005***         
+                             (0.00004)         
+
+kid06                        -0.231***         
+                              (0.033)          
+
+kid714                       -0.280***         
+                              (0.025)          
+
+kid1520                      -0.165***         
+                              (0.025)          
+
+capital                       -0.027           
+                              (0.022)          
+
+urban                        -0.072***         
+                              (0.019)          
+
+single                       0.154***          
+                              (0.018)          
+
+log(totfoodpers)             0.458***          
+                              (0.014)          
+
+Constant                     -3.599***         
+                              (0.158)          
+
+-----------------------------------------------
+Observations                  13,867           
+R2                             0.211           
+Adjusted R2                    0.210           
+Residual Std. Error     0.953 (df = 13856)     
+F Statistic         369.726*** (df = 10; 13856)
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>We can see from our estimation that all of the estimated marginal effect are significant even on 1% significance level except the capital. This indicates that whether someone is living at capital or not does not determine the consomption of soda.</p></li>
+<li><p>Which assumptions do we need to invoke to ensure the unbiasedness of our OLS estimates? Explain.</p>
+<p>The unbiasedness of OLS can be assured if we obey MLR.1 - MLR.4 which are linear model of population, random sampling, conditional zero mean and conditional zero mean. In addition, if the sample is large we can have weaker MLR.4 that states we only need cov(x,u) = 0. However, those four do not guarantee that our estimates are efficent.</p></li>
+<li><p>Which assumptions need to hold in order to carry out standard inference (<span class="math inline">\(t\)</span>-tests and <span class="math inline">\(F\)</span>-tests)? Why?</p>
+<p>MLR.6 should be obeyed which tells us that the residual has to be normally distributed. However, this restriction can be replace by the CLT (Central Limit Theory) which state that in infinity number of samples, the distribution of u will be normally distributed.</p></li>
+<li><p>Do these assumptions seem reasonable in our model? Reflect on your answer.</p>
+<p>MLR.1: reasonable since our population model is linear<br>
+MLR.2: Not reasonable because the self-selection colledted data introduces not random sample.<br>
+MRL.3: rewe can check by computing the correlation matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(inputnames <span class="ot">&lt;-</span> <span class="fu">intersect</span>(<span class="fu">names</span>(softdrink_data),</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">names</span>(softdrink_model1<span class="sc">$</span>coefficients)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "age"     "single"  "capital" "urban"   "kid06"   "kid714"  "kid1520"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">subset</span>(softdrink_data,<span class="at">select=</span>inputnames))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                age      single     capital        urban        kid06
+age      1.00000000  0.13997919  0.04151441 -0.045070176 -0.388919911
+single   0.13997919  1.00000000  0.20486210 -0.026751135 -0.171802208
+capital  0.04151441  0.20486210  1.00000000 -0.493644973 -0.086450515
+urban   -0.04507018 -0.02675114 -0.49364497  1.000000000 -0.001446513
+kid06   -0.38891991 -0.17180221 -0.08645052 -0.001446513  1.000000000
+kid714  -0.32950030 -0.13130048 -0.08328128 -0.002648214  0.258421957
+kid1520 -0.18979227 -0.11755330 -0.05842176  0.036758283 -0.033821310
+              kid714     kid1520
+age     -0.329500305 -0.18979227
+single  -0.131300477 -0.11755330
+capital -0.083281278 -0.05842176
+urban   -0.002648214  0.03675828
+kid06    0.258421957 -0.03382131
+kid714   1.000000000  0.25335471
+kid1520  0.253354709  1.00000000</code></pre>
+</div>
+</div>
+<p>from the result above, it seems we don’t have any perfect collinearity between vairables which makes MLR.3 valid.<br>
+MLR.4: We are not sure for it since it is really hard to make sure that we include all of the factors so that the population error model is zero given our samples.<br>
+MLR.5-6: We need to investigate further from our result</p></li>
+</ol>
+</section>
+</section>
+<section id="problem-6.2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-6.2">Problem 6.2</h2>
+<p>Use the data in <code>wage1</code> for this exercise.</p>
+<ol type="1">
+<li><p>Estimate the equation: <span class="math display">\[\begin{align}
+     wage = \beta_0 + \beta_1 educ + \beta_2 exper + \beta_3 tenure + u
+\end{align}\]</span> Save the residuals and plot a histogram of them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>wage_data <span class="ot">&lt;-</span> wage1</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>wage_model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> wage_data, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> wage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> tenure)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage_model1, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                               wage            
+-----------------------------------------------
+educ                         0.599***          
+                              (0.051)          
+
+exper                         0.022*           
+                              (0.012)          
+
+tenure                       0.169***          
+                              (0.022)          
+
+Constant                     -2.873***         
+                              (0.729)          
+
+-----------------------------------------------
+Observations                    526            
+R2                             0.306           
+Adjusted R2                    0.302           
+Residual Std. Error      3.084 (df = 522)      
+F Statistic           76.873*** (df = 3; 522)  
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>y_hat_wage <span class="ot">=</span> <span class="fu">predict</span>(wage_model1)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">val =</span> wage1<span class="sc">$</span>wage <span class="sc">-</span> y_hat_wage)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> residuals, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> val)) <span class="sc">+</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Residuals (wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="01_notebook06_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
+<li><p>Repeat part 1, but with <span class="math inline">\(\log(wage)\)</span> as the dependent variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>wage_data <span class="ot">&lt;-</span> wage1</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>wage_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> wage_data, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> tenure)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage_model2, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                             log(wage)         
+-----------------------------------------------
+educ                         0.092***          
+                              (0.007)          
+
+exper                         0.004**          
+                              (0.002)          
+
+tenure                       0.022***          
+                              (0.003)          
+
+Constant                     0.284***          
+                              (0.104)          
+
+-----------------------------------------------
+Observations                    526            
+R2                             0.316           
+Adjusted R2                    0.312           
+Residual Std. Error      0.441 (df = 522)      
+F Statistic           80.391*** (df = 3; 522)  
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>y_hat_wage <span class="ot">=</span> <span class="fu">predict</span>(wage_model2)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">val =</span> <span class="fu">log</span>(wage1<span class="sc">$</span>wage) <span class="sc">-</span> y_hat_wage)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> residuals, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> val)) <span class="sc">+</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span> </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Residuals log(wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="01_notebook06_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As can be seen from two figures above, the log transformation of wage makes the residual distribution closer to normal distribution.</p></li>
+<li><p>Would you say that Assumption MLR.6 is closer to being satisfied for the level-level model or the log-level model?</p>
+<p>If we are dealing with small samples and need to rely on MLR.6, the semi-elasticity sure will help for closer MLR.6 assumption. However, if we have large enough samples (e.g., n &gt;=1500) it is not important whether we choose the level-level or log-level model. The most important thing is how we can interpret the problem (e.g.&nbsp;whether we want to report it as a percentage change or not). Note: comparing visually sometimes is not enough.</p></li>
+</ol>
+</section>
+<section id="problem-6.3" class="level2">
+<h2 class="anchored" data-anchor-id="problem-6.3">Problem 6.3</h2>
+<p>Use the data in <code>wage2</code> for this exercise.</p>
+<ol type="1">
+<li><p>Estimate the model <span class="math display">\[\begin{align}
+     \log(wage) &amp;= \beta_0 + \beta_1 educ + \beta_2 exper + \beta_3 tenure + \beta_4 married \\
+     &amp;+ \beta_5 black + \beta_6 south + \beta_7 urban + u,
+\end{align}\]</span> and report the results in the usual form. Holding other factors fixed, what is the approximate difference in monthly salary between blacks and nonblacks? Is this difference statistically significant?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>wage2_data <span class="ot">&lt;-</span> wage2 </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>wage2_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> tenure <span class="sc">+</span> married <span class="sc">+</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                    black <span class="sc">+</span> south <span class="sc">+</span> urban)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage2_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                             log(wage)         
+-----------------------------------------------
+educ                         0.065***          
+                              (0.006)          
+
+exper                        0.014***          
+                              (0.003)          
+
+tenure                       0.012***          
+                              (0.002)          
+
+married                      0.199***          
+                              (0.039)          
+
+black                        -0.188***         
+                              (0.038)          
+
+south                        -0.091***         
+                              (0.026)          
+
+urban                        0.184***          
+                              (0.027)          
+
+Constant                     5.395***          
+                              (0.113)          
+
+-----------------------------------------------
+Observations                    935            
+R2                             0.253           
+Adjusted R2                    0.247           
+Residual Std. Error      0.365 (df = 927)      
+F Statistic           44.747*** (df = 7; 927)  
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>From the result above, the estimated difference salary between blacks and nonblacks is approximately -18.8% which is statistically significance even in 99% confidence interval. However, for precise effect:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>exact_beta_hat_black <span class="ot">=</span> <span class="dv">100</span><span class="sc">*</span>(<span class="fu">exp</span>(wage2_model<span class="sc">$</span>coefficients[<span class="dv">6</span>])<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Exact beta_hat_black: "</span>, <span class="fu">round</span>(exact_beta_hat_black,<span class="dv">2</span>), <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Exact beta_hat_black: -17.17%"</code></pre>
+</div>
+</div></li>
+<li><p>Add the variables <span class="math inline">\(exper^2\)</span> and <span class="math inline">\(tenure^2\)</span> to the equation and show that they are jointly insignificant at even the <span class="math inline">\(20\%\)</span> level.</p>
+<p>To do this we we will create an unrestricted population model. Then we compare the joint distribution of the two variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>wage2_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> <span class="fu">I</span>(exper<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> tenure <span class="sc">+</span> <span class="fu">I</span>(tenure<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> married <span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                    black <span class="sc">+</span> south <span class="sc">+</span> urban)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(wage2_model, wage2_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: log(wage) ~ educ + exper + tenure + married + black + south + 
+    urban
+Model 2: log(wage) ~ educ + exper + I(exper^2) + tenure + I(tenure^2) + 
+    married + black + south + urban
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+1    927 123.82                           
+2    925 123.42  2   0.39756 1.4898  0.226</code></pre>
+</div>
+</div>
+<p>From the above restricted F-test, we can see that the p-value is 22.6% which is not statistically significance even at 20% level. Hence, we can not reject our null hypothesis which states that the two additional marginal effects of <span class="math inline">\(exper^2\)</span> and <span class="math inline">\(tenure^2\)</span> are zero.</p></li>
+<li><p>Extend the original model to allow the return to education to depend on race and test whether the return to education does depend on race.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>wage2_model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ<span class="sc">*</span>black <span class="sc">+</span> exper <span class="sc">+</span> tenure <span class="sc">+</span> married <span class="sc">+</span> south <span class="sc">+</span> urban)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage2_model, wage2_model2, wage2_model3, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===========================================================================================
+                                              Dependent variable:                          
+                    -----------------------------------------------------------------------
+                                                   log(wage)                               
+                              (1)                     (2)                     (3)          
+-------------------------------------------------------------------------------------------
+educ                       0.065***                0.064***                0.067***        
+                            (0.006)                 (0.006)                 (0.006)        
+
+exper                      0.014***                  0.017                 0.014***        
+                            (0.003)                 (0.013)                 (0.003)        
+
+I(exper2)                                           -0.0001                                
+                                                    (0.001)                                
+
+tenure                     0.012***                0.025***                0.012***        
+                            (0.002)                 (0.008)                 (0.002)        
+
+I(tenure2)                                          -0.001*                                
+                                                   (0.0005)                                
+
+married                    0.199***                0.199***                0.199***        
+                            (0.039)                 (0.039)                 (0.039)        
+
+black                      -0.188***               -0.191***                 0.095         
+                            (0.038)                 (0.038)                 (0.255)        
+
+south                      -0.091***               -0.091***               -0.089***       
+                            (0.026)                 (0.026)                 (0.026)        
+
+urban                      0.184***                0.185***                0.184***        
+                            (0.027)                 (0.027)                 (0.027)        
+
+educ:black                                                                  -0.023         
+                                                                            (0.020)        
+
+Constant                   5.395***                5.359***                5.375***        
+                            (0.113)                 (0.126)                 (0.115)        
+
+-------------------------------------------------------------------------------------------
+Observations                  935                     935                     935          
+R2                           0.253                   0.255                   0.254         
+Adjusted R2                  0.247                   0.248                   0.247         
+Residual Std. Error    0.365 (df = 927)        0.365 (df = 925)        0.365 (df = 926)    
+F Statistic         44.747*** (df = 7; 927) 35.171*** (df = 9; 925) 39.322*** (df = 8; 926)
+===========================================================================================
+Note:                                                           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>From the result above, the interaction coefficient between educ and black is not statistically significant even at 10% level. This means that we can confidently say that there is no interaction between black and education variables and we can exclude it from our model.</p></li>
+</ol>
+</section>
+<section id="problem-6.4" class="level2">
+<h2 class="anchored" data-anchor-id="problem-6.4">Problem 6.4</h2>
+<p>Use the data in <code>kielmc</code>, only for the year 1981, to answer the following questions. The data are for houses that sold during 1981 in North Andover, Massachusetts; 1981 was the year construction began on a local garbage incinerator.</p>
+<ol type="1">
+<li><p>To study the effects of the incinerator location on housing price, consider the simple regression model <span class="math display">\[\begin{align}
+     \log(price) = \beta_0 + \beta_1 \log(dist) + u,
+\end{align}\]</span> where <span class="math inline">\(price\)</span> is the housing price in dollars and <span class="math inline">\(dist\)</span> is distance from the house to the incinerator measured in feet. Interpreting the equation causally, what sign do you expect for <span class="math inline">\(\beta_1\)</span>, if the presence of the incinerator depresses housing prices? Estimate this equation and interpret the results<br>
+</p>
+<p>I expect that the sign of <span class="math inline">\(\beta_{1}\)</span> would reflect the percentage change in other direction (minus). To validate this assumption we estimate it with the above population model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>house_price_data <span class="ot">&lt;-</span> kielmc</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>house_price_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> house_price_data, </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">formula =</span> <span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(dist))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(house_price_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===============================================
+                        Dependent variable:    
+                    ---------------------------
+                            log(price)         
+-----------------------------------------------
+log(dist)                    0.317***          
+                              (0.048)          
+
+Constant                     8.258***          
+                              (0.474)          
+
+-----------------------------------------------
+Observations                    321            
+R2                             0.120           
+Adjusted R2                    0.117           
+Residual Std. Error      0.412 (df = 319)      
+F Statistic           43.477*** (df = 1; 319)  
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>Based on our estimate with the above population model, we can see that the <span class="math inline">\(\beta_{1}\)</span> is positively associated with the house price (one percent change in distance will increase the house price by ~8.3% in 99% confidence interval) which is not what I expected. This might be due to several factors that we have not included into the population model which overestimated our assumption.</p></li>
+<li><p>To the simple regression model in part 1, add the variables <span class="math inline">\(\log(intst)\)</span>, <span class="math inline">\(\log(area)\)</span>, <span class="math inline">\(\log(land)\)</span>, <span class="math inline">\(rooms\)</span>, <span class="math inline">\(baths\)</span>, and <span class="math inline">\(age\)</span>, where <span class="math inline">\(intst\)</span> is distance from the home to the interstate, <span class="math inline">\(area\)</span> is square footage of the house, <span class="math inline">\(land\)</span> is the lot size in square feet, <span class="math inline">\(rooms\)</span> is total number of rooms, <span class="math inline">\(baths\)</span> is number of bathrooms, and <span class="math inline">\(age\)</span> is the age of the house in years. Now, what do you conclude about the effects of the incinerator? Explain why 1 and 2 give conflicting results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>house_price_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> house_price_data, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">formula =</span> <span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(dist) <span class="sc">+</span> <span class="fu">log</span>(intst) <span class="sc">+</span> <span class="fu">log</span>(area) <span class="sc">+</span> <span class="fu">log</span>(land) <span class="sc">+</span> rooms <span class="sc">+</span> baths <span class="sc">+</span> age)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(house_price_model, house_price_model2, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===================================================================
+                                  Dependent variable:              
+                    -----------------------------------------------
+                                      log(price)                   
+                              (1)                     (2)          
+-------------------------------------------------------------------
+log(dist)                  0.317***                  0.028         
+                            (0.048)                 (0.053)        
+
+log(intst)                                          -0.044         
+                                                    (0.042)        
+
+log(area)                                          0.512***        
+                                                    (0.070)        
+
+log(land)                                           0.078**        
+                                                    (0.034)        
+
+rooms                                               0.050**        
+                                                    (0.024)        
+
+baths                                              0.107***        
+                                                    (0.035)        
+
+age                                                -0.004***       
+                                                    (0.001)        
+
+Constant                   8.258***                6.300***        
+                            (0.474)                 (0.596)        
+
+-------------------------------------------------------------------
+Observations                  321                     321          
+R2                           0.120                   0.593         
+Adjusted R2                  0.117                   0.583         
+Residual Std. Error    0.412 (df = 319)        0.283 (df = 313)    
+F Statistic         43.477*** (df = 1; 319) 65.017*** (df = 7; 313)
+===================================================================
+Note:                                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>Based on the result above, we can see now that the log(dist) is not statistically significant anymore even at 1% level. This because we have explicitly control other factors that related to the quality of a house.</p></li>
+<li><p>Add <span class="math inline">\([\log(intst)]^2\)</span> to the model from part 2. Now what happens? What do you conclude about the importance of functional form?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>house_price_model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> house_price_data, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">formula =</span> <span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(dist) <span class="sc">+</span> <span class="fu">log</span>(intst)  <span class="sc">+</span> <span class="fu">I</span>(<span class="fu">log</span>(intst)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">log</span>(area) <span class="sc">+</span> <span class="fu">log</span>(land) <span class="sc">+</span> rooms <span class="sc">+</span> baths <span class="sc">+</span> age)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(house_price_model, house_price_model2, house_price_model3, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+===========================================================================================
+                                              Dependent variable:                          
+                    -----------------------------------------------------------------------
+                                                  log(price)                               
+                              (1)                     (2)                     (3)          
+-------------------------------------------------------------------------------------------
+log(dist)                  0.317***                  0.028                 0.190***        
+                            (0.048)                 (0.053)                 (0.063)        
+
+log(intst)                                          -0.044                 1.902***        
+                                                    (0.042)                 (0.431)        
+
+I(log(intst)2)                                                             -0.113***       
+                                                                            (0.025)        
+
+log(area)                                          0.512***                0.514***        
+                                                    (0.070)                 (0.068)        
+
+log(land)                                           0.078**                0.107***        
+                                                    (0.034)                 (0.033)        
+
+rooms                                               0.050**                 0.049**        
+                                                    (0.024)                 (0.023)        
+
+baths                                              0.107***                0.090***        
+                                                    (0.035)                 (0.034)        
+
+age                                                -0.004***               -0.004***       
+                                                    (0.001)                 (0.001)        
+
+Constant                   8.258***                6.300***                 -3.791*        
+                            (0.474)                 (0.596)                 (2.296)        
+
+-------------------------------------------------------------------------------------------
+Observations                  321                     321                     321          
+R2                           0.120                   0.593                   0.618         
+Adjusted R2                  0.117                   0.583                   0.608         
+Residual Std. Error    0.412 (df = 319)        0.283 (df = 313)        0.274 (df = 312)    
+F Statistic         43.477*** (df = 1; 319) 65.017*** (df = 7; 313) 63.036*** (df = 8; 312)
+===========================================================================================
+Note:                                                           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>When we add the above variable, we can see that the log(dist) is back to be statstically significant even at 1% level. However, the effect is lower compared to the first population model. This might be due to other controlled variables that we introduce. In addition, we can also see that log(inst) and log(inst)^2 are both statistically significant which could tell us that there is an optimal interstate distance which can maximize the effect of the house price which makes sense since it can be a factor that shows us how close the house from the city center.</p></li>
+</ol>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

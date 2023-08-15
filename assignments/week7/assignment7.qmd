@@ -1,0 +1,299 @@
+---
+title: "assignment6"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+```{r}
+#| eval: false
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+softdrink_data <- get(load("softdrink.RData"))
+```
+
+## Problem 7.1: Obesity rates (continued)
+
+::: callout-caution
+Please note that this is a continuation of Problem 6.1 from yesterday's exercises. I've provided my answers for the first ten exercises. You should continue with exercises 7.1.11-7.1.18.
+:::
+
+Data from OECD shows that the rate of obesity in Denmark reached $13.5\%$ in 2010. This corresponds to an increase of approximately $18\%$ compared to 2005 and a $150\%$ rise since 1987. This places Denmark below the average level in OECD countries but above the level for comparable countries like Sweden and Norway. The rise in obesity seems to be larger among younger and less educated individuals.
+
+Even though obesity, to a large extent, is thought to be the outcome of an individual decision process, politicians must also consider the impact of these private decisions on society. Extreme obesity is correlated with many lifestyle-related illnesses, and it, therefore, poses a large burden on healthcare systems. More importantly, it impacts society in countries with publicly financed healthcare systems (like Denmark) since obese individuals pay the same to the healthcare system as non-obese individuals that do not have the same healthcare needs. Politicians, therefore, have a direct interest in reducing obesity. Several lifestyle factors seem to have contributed to the obesity epidemic during the last decades: The price of food, especially unhealthy foods, has declined, the amount of sedentary work has increased, and the use of electrical equipment and private cars has expanded.
+
+The political system is searching for ways to reduce the problem. One way to do this is to consider using economic instruments to change people's lifestyles and reduce, e.g., the consumption of unhealthy foods like soft drinks. The increasing consumption of soft drinks is an essential cause of the increased prevalence of obesity. In this assignment, you will investigate the lifestyle behavior of different household groups regarding soft drink consumption and the potential for politicians to change this behavior by imposing economic (tax) instruments.
+
+### Data description
+
+The data set is called `softdrink.RData` and is available [here](https://absalon.ku.dk/courses/57563/files/6209254?module_item_id=1712482). It is a subset of a larger data set from the research company GfK ConsumerTracking Scandinavia which covers approximately 2500 consumers that, every week, report their purchase of everyday staples like food for in-house consumption. The respondents select themselves into the panel. The purchases are registered by the household member who is mainly responsible for shopping. The data set covers aggregate food and soft drink expenditures in 2004. The data set also includes household characteristics aggregated into monthly observations. That is, each observation of purchases is from a select week. The data set contains the following variables:
+
+| Variable      | Description                                                   |
+|-----------------|-------------------------------------------------------|
+| `volpers`     | volume of soda per person in household                        |
+| `soft`        | $=1$ if soda has been bought in a given month, 0 otherwise    |
+| `price`       | average price paid for soda in a month                        |
+| `totfoodpers` | total food expenditure per person                             |
+| `age`         | age in years for the primary shopper                          |
+| `single`      | $=1$ if the household consists of a single adult, 0 otherwise |
+| `capital`     | $=1$ if households lives in capital area, 0 otherwise         |
+| `urban`       | $=1$ if households lives in urban area, 0 otherwise           |
+| `rural`       | $=1$ if households lives in rural area, 0 otherwise           |
+| `high_edu`    | $=1$ if primary shopper has a higher education, 0 otherwise   |
+| `kid06`       | $=1$ if there are kids between 0 and 6, 0 otherwise           |
+| `kid714`      | $=1$ if there are kids between 7 and 14, 0 otherwise          |
+| `kid1520`     | $=1$ if there are kids between 15 and 20, 0 otherwise         |
+
+::: callout-important
+Start by loading the data set. Note that the environment is called `students` and not `data.` Therefore, I changed the name in the following code snippet:
+
+```{r}
+load("softdrink.RData")
+data <- students
+```
+:::
+
+### Exercises
+
+Please answer the following questions:
+
+1.  Provide a table with all the variables in the data set. What type of data are we working with? Explain.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+The included data set includes all of the following:
+
+```{r}
+#| message: false
+library(stargazer)
+stargazer(data,
+    type = "text",
+    summary.logical = FALSE,
+    omit.summary.stat = c("p25", "p75")
+)
+```
+
+We are working with a cross-sectional data set.
+
+::: callout-warning
+In an exam situation, I would expect you to provide details of what can be read from the table. The above would not be sufficient for a passing grade. Some things to consider:
+
+1.  What can we read from the table of descriptive statistics?
+2.  Is there anything that immediately springs to mind?
+3.  What variables are we working with?
+4.  Can we already now infer anything interesting about the problem at hand?\*
+:::
+:::
+
+2.  What do you think are the main sources of errors in this type of data in relation to soft drink consumption? For instance, what problems may arise as a result of self-selection? Discuss.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+The primary source of error is probably related to households selecting themselves into the panel. This reduces external validity, as we cannot document that the panelists were found by random sampling. For instance, one could imagine that people that want to invest time in documenting their purchasing behavior are probably more likely to also be attentive to their consumption.
+
+Another issue is related to the fact that the data is only on within-household purchases. This implies that consumption outside the household is not necessarily taken into account. Additionally, one could imagine that the purchasing and consumption of soda is something you are relatively more inclined to try hiding, in comparison to fruits or vegetables, for instance. This could lead to possible under-reporting of particular unhealthy habits. This would not be a problem if the under-reporting was random across all groups, but it may be so if it is specific to the consumption of certain food commodities.
+
+We do not know anything about the distribution within the household. Therefore, the consumption of soda is treated as a simple average across all individuals in the partaking household. If we were to consider a household with two adults and one child, where the child is the only consumer of soft drinks, the per-person consumption may not appear that large, even though the child may be drinking excessive amounts of soda.
+:::
+
+3.  Draw and present a histogram of the age distribution for the main shopping responsible. Do you think it is representative of the Danish population?
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+```{r}
+library(ggplot2)
+ggplot(data, aes(x = age)) +
+    geom_histogram(aes(y = after_stat(density)), colour = "black", fill = "brown1", alpha = 0.5, bins = 20) +
+    geom_density(fill = "steelblue4", alpha = 0.5) +
+    labs(x = "Age", y = "Density", title = "The distribution of age among our sample") +
+    theme_minimal()
+```
+
+When considering that we are not including persons with $age < 18$, the distribution is somewhat more reasonable. Nevertheless, we still note that the average age appears to be much larger than we would expect. This could be a slight indication of selection bias.
+:::
+
+4.  Calculate the mean consumption for singles with $age<35$, singles between 35 and 50, singles between 50 and 70, and singles above 70, and the same for couples (in total, eight different conditional sample means).
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+We calculate the conditional means using:
+
+```{r}
+mean(data$volpers[data$age < 35 & data$single == 1])
+mean(data$volpers[35 < data$age & data$age < 50 & data$single == 1])
+```
+
+$\vdots$
+
+```{r}
+mean(data$volpers[70 < data$age & data$single == 0])
+```
+:::
+
+5.  Who are the largest consumers of soft drinks? Is this what you expected?
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+It would seem that single persons consume more soda than non-singles. In addition, younger people tend to be consuming relatively more. Given the introduction, this follows our initial expectations. We should note that the fact that singles drink more soda could relate to the problem we discussed initially. A simple average is a poor description of the actual consumption within a given household. This is not the case for singles, as we would assume their purchases go towards their own consumption (at least primarily).
+:::
+
+6.  Calculate the frequency of zero purchases of soft drinks in each of the eight groups and comment on the results in relation to question 3. (Remember that the variable `soft` is a dummy indicating whether the household purchased soft drinks or not in a given month).
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+I calculate the conditional means as:
+
+```{r}
+1 - mean(data$soft[data$age < 35 & data$single == 1])
+1 - mean(data$soft[35 < data$age & data$age < 50 & data$single == 1])
+```
+
+$\vdots$
+
+```{r}
+1 - mean(data$soft[70 < data$age & data$single == 0])
+```
+
+When inspecting the last column of our table, we find that singles, more so than non-singles, purchase no soda at all. The same goes for the different age groups, where higher age seems to imply a higher frequency of zero purchases. This could indicate that singles who consume soda do so in relatively large quantities.
+:::
+
+7.  Now remove all observations that have not purchased any soda. As we assume that the consumption of soft drinks in liters per person is to some extent determined by the price, the age and education of the household member who is mainly responsible for shopping, how much the household spends on food per person, the number of kids in the household, urbanity, and single status, we assume the following model for the population: \begin{align*}
+     \log(volpers)&=\beta_0 + \beta_1\log(price) + \beta_2age + \beta_3 age^2 + \beta_4 kid06 + \beta_5 kid714 \\ &+ \beta_6 kid1520 + \beta_7capital + \beta_8 urban + \beta_9 single + \beta_{10} \log(totfoodpers) + u.
+    \end{align*} Estimate the model and report your results in equation form, with corresponding standard errors, the number of observations, and $R^2$.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+We estimate our model:
+
+```{r}
+# Estimation
+data <- subset(data, volpers > 0)
+logModel <- lm(log(volpers) ~ log(price) + age + I(age^2) +
+    kid06 + kid714 + kid1520 +
+    capital + urban + single +
+    log(totfoodpers), data = data)
+
+# Results
+stargazer(logModel,
+    type = "text",
+    title = "Wage differences",
+    omit.stat = c("ser", "f", "adj.rsq"),
+    intercept.bottom = FALSE,
+    star.cutoffs = c(0.05, 0.01, 0.001)
+)
+```
+:::
+
+8.  Which assumptions do we need to invoke to ensure the unbiasedness of our OLS estimates? Explain.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+Unbiasedness ($E(\hat{\beta}_j) = \beta_j$) is ensured under Assumptions MLR. 1 through MLR. 4. Consistency ($\hat{\beta}_j \rightarrow \beta_j$ as $n\rightarrow \infty$) is implied by Assumptions MLR. 1 through MLR. 3 and the weaker MLR. 4': \begin{align}
+        E(u) = 0 \quad \text{and} \quad Cov(x_j, u) = 0.
+\end{align} The latter ensures linear independence, whilst MLR. 4 ensures complete independence. Consistency is, therefore, a weaker property of our estimator than unbiasedness.
+
+::: callout-warning
+In an exam situation, I would methodically present and discuss the implications of each assumption formally.
+:::
+:::
+
+9.  Which assumptions need to hold in order to carry out standard inference ($t$-tests and $F$-tests)? Why?
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+Ideally, we would like the population error term to be independent of the explanatory variables and normally distributed with mean zero and variance $\sigma^2$, as surmised by Assumption MLR. 6: $u\sim \mathcal{N}(0, \sigma^2)$. Seeing as this is the strongest assumption we have imposed (by far), we can replace this with the weaker MLR. 5 of conditional homoskedasticity: \begin{align}
+        Var(u \mid x_1, x_2, \dotsc, x_k) = \sigma^2,
+\end{align} as this for large enough samples (and if a Central Limit Theorem (CLT) applies) ensures that our $t$- and $F$-statistics are asymptotically normally distributed. If this is not the case, we cannot carry out standard inference. If heteroskedasticity is persistent, you should use heteroskedasticity-robust standard errors for inference, but these are only valid in sufficiently large samples.
+
+::: callout-warning
+In an exam situation, I would expect you to spend more time discussing the implications of assuming asymptotic normality. I **do not** expect you to provide proof of a CLT applying, but you should, at minimum, note that this is a requirement for assuming asymptotic normality.
+:::
+:::
+
+10. Do these assumptions seem reasonable in our model? Reflect on your answer.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Solution
+
+**Important problems to note:**
+
+-   **MLR.2**: We clearly do not have a random sampling. Instead, you could discuss whether participating in the panel is independent of your day-to-day consumption of soda (or other ways to circumvent this issue).
+-   **MLR.4**: You can always discuss the validity of assuming a zero conditional mean. In practice, we would never expect it to be fulfilled entirely. Therefore, a *good discussion* relates to the data at hand. Is there anything obvious we are missing here that may be important? We can always come up with the argument that it would be convenient to have more (and better) available data, but what would be *essential* for the validity of your study.
+-   For both **MLR.5** and **MLR. 6**, we should investigate further as we have specific formal tests or graphical tools that will allow for a better and more thorough discussion.
+
+**Less important:**
+
+-   **MLR.3** Either you have perfect collinearity, or you don't. If this is an issue, you have a fundamental and critical issue, which means you cannot estimate your parameters with OLS. Fix it!
+-   **MLR.1** This is a design question. You are assuming some relationship in the population. Given that the proposed model is linear in its parameters, we have no issues. What you instead could do, is discuss whether the functional form of the proposed model seems valid.
+:::
+
+11. Plot the density of $volpers$ and $\log(volpers)$. Based on the two figures, and your general knowledge, discuss what the difference is of using $\log(volpers)$ as the dependent variable rather than $volpers$.
+
+12. Assume that the Classical Linear Model (CLM) assumptions apply. Estimate the proposed model for the population and report your findings in a table. Discuss your results. Are they as you expected?
+
+13. Calculate a confidence interval for the parameter on single status (`single`). How does this compare to your previous results about the significance of this parameter?
+
+14. Test for the joint significance of urbanity (the variables $urban$ and $capital$). Remember to state $H_0$ and $H_1$ when testing.
+
+15. Calculate the partial effects of having children of different ages (i.e. $kid06$, $kid714$, and $kid1520$). Interpret.
+
+### Video 7.3: The Breusch Pagan test for heteroskedasticity
+
+A video on the Breusch Pagan test for heteroscedasticity. A good watch if you need a recap of the readings!
+
+{{< video https://youtu.be/wzLADO24CDk >}}
+
+16. Carry out the Breusch-Pagan test for heteroskedasticity and report the results. Is heteroskedasticity a problem here?
+
+## Video 7.4: The White test for heteroskedasticity
+
+Again, if you just want to make sure you correctly understood the White test for heteroskedasticity, watch this video.
+
+{{< video https://youtu.be/M5xqpKzhyAM >}}
+
+17. Do the special case of the White test for heteroskedasticity. Do you reach the same conclusion as with the Breusch-Pagan test?
+
+18. How can heteroskedasticity influence your estimation? Moreover, what can you do to alleviate the problem of persistent heteroskedasticity?
+
+## Problem 7.2
+
+Use the data in `wage1` for this exercise.
+
+1.  Using the following hourly wage equation: \begin{align*}
+         \widehat{\log(wage)} &=\underset{(.119)}{.389} - \underset{(.168)}{.227}female + \underset{(.008)}{.082} educ \\
+         &- \underset{(.0131)}{.0056}female\cdot educ + \underset{(.005)}{.029}exper - \underset{(.00011)}{.00058}exper^2 \\
+         &+ \underset{(.007)}{.032}tenure - \underset{(.00024)}{.00059}tenure^2 \\
+         n&=526, \quad R^2 = .441
+    \end{align*} Estimate the gender differential in hourly wage when $educ = 12.5$. Compare this with the estimated differential when $educ = 0$.
+
+2.  Run the regression used to obtain the above estimation, but with $female\cdot (educ-12.5)$ replacing $female\cdot educ$. How do you interpret the coefficient on $female$ now?
+
+3.  Is the coefficient on $female$ in part 1 statistically significant? Compare this with the hourly wage equation from 1 and comment.
+
+## Problem 7.3
+
+1.  Use the data in `hprice1` to obtain the heteroskedasticity-robust standard errors for equation (8.17). Discuss any important differences with the usual standard errors.
+
+2.  Repeat part 1 for equation (8.18).
+
+3.  What does this example suggest about heteroskedasticity and the transformation used for the dependent variable?
+
+## Problem 7.4
+
+Use `vote1` for this exercise.
+
+1.  Estimate a model with $voteA$ as the dependent variable and $prtystrA$, $democA$, $\log(expendA)$, and $\log(expendB)$ as independent variables. Obtain the OLS residuals, $\hat{u}_i$, and regress these on all of the independent variables. Explain why you obtain $R^2=0$.
+
+2.  Now, compute the Breusch-Pagan test for heteroskedasticity. Use the $F$ statistic version and report the $p$-value.
+
+3.  Compute the special case of the White test for heteroskedasticity, again using the $F$ statistic form. How strong is the evidence for heteroskedasticity now?
