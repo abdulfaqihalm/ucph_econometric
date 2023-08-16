@@ -8,7 +8,7 @@
 
 <meta name="author" content="Abdullah Faqih Al Mubarok">
 
-<title>assignment6</title>
+<title>assignment7</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">assignment6</h1>
+<h1 class="title">assignment7</h1>
 </div>
 
 
@@ -112,7 +112,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>softdrink_data <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="fu">load</span>(<span class="st">"softdrink.RData"</span>))</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>wage1_data <span class="ot">&lt;-</span> wage1</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>hprice1_data <span class="ot">&lt;-</span> hprice1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>hprice1_data <span class="ot">&lt;-</span> hprice1</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>vote1_data <span class="ot">&lt;-</span> vote1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="problem-7.1-obesity-rates-continued" class="level2">
 <h2 class="anchored" data-anchor-id="problem-7.1-obesity-rates-continued">Problem 7.1: Obesity rates (continued)</h2>
@@ -1736,9 +1737,149 @@ Note:         *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <h2 class="anchored" data-anchor-id="problem-7.4">Problem 7.4</h2>
 <p>Use <code>vote1</code> for this exercise.</p>
 <ol type="1">
-<li><p>Estimate a model with <span class="math inline">\(voteA\)</span> as the dependent variable and <span class="math inline">\(prtystrA\)</span>, <span class="math inline">\(democA\)</span>, <span class="math inline">\(\log(expendA)\)</span>, and <span class="math inline">\(\log(expendB)\)</span> as independent variables. Obtain the OLS residuals, <span class="math inline">\(\hat{u}_i\)</span>, and regress these on all of the independent variables. Explain why you obtain <span class="math inline">\(R^2=0\)</span>.</p></li>
-<li><p>Now, compute the Breusch-Pagan test for heteroskedasticity. Use the <span class="math inline">\(F\)</span> statistic version and report the <span class="math inline">\(p\)</span>-value.</p></li>
-<li><p>Compute the special case of the White test for heteroskedasticity, again using the <span class="math inline">\(F\)</span> statistic form. How strong is the evidence for heteroskedasticity now?</p></li>
+<li><p>Estimate a model with <span class="math inline">\(voteA\)</span> as the dependent variable and <span class="math inline">\(prtystrA\)</span>, <span class="math inline">\(democA\)</span>, <span class="math inline">\(\log(expendA)\)</span>, and <span class="math inline">\(\log(expendB)\)</span> as independent variables. Obtain the OLS residuals, <span class="math inline">\(\hat{u}_i\)</span>, and regress these on all of the independent variables. Explain why you obtain <span class="math inline">\(R^2=0\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>vote1_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> vote1_data, </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> voteA <span class="sc">~</span> prtystrA <span class="sc">+</span> democA <span class="sc">+</span> lexpendA <span class="sc">+</span> lexpendB)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>u_hat_data <span class="ot">&lt;-</span> vote1_data <span class="sc">|&gt;</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prtystrA, democA, lexpendA, lexpendB) <span class="sc">|&gt;</span> </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">u_hat =</span> <span class="fu">residuals</span>(vote1_model))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>u_hat_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> u_hat_data, </span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> u_hat <span class="sc">~</span> prtystrA <span class="sc">+</span> democA <span class="sc">+</span> lexpendA <span class="sc">+</span> lexpendB)</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(u_hat_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = u_hat ~ prtystrA + democA + lexpendA + lexpendB, 
+    data = u_hat_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-18.576  -4.864  -1.146   4.903  24.566 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -8.869e-15  4.736e+00       0        1
+prtystrA     1.012e-16  7.129e-02       0        1
+democA       1.194e-15  1.407e+00       0        1
+lexpendA    -3.648e-16  3.918e-01       0        1
+lexpendB     9.420e-16  3.975e-01       0        1
+
+Residual standard error: 7.573 on 168 degrees of freedom
+Multiple R-squared:  3.616e-32, Adjusted R-squared:  -0.02381 
+F-statistic: 1.519e-30 on 4 and 168 DF,  p-value: 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"Near zero u_hat (&lt;1): "</span>, <span class="fu">length</span>(u_hat_data[u_hat_data<span class="sc">$</span>u_hat<span class="sc">&lt;</span><span class="dv">1</span>,]<span class="sc">$</span>u_hat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Near zero u_hat (&lt;1): 104"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> u_hat_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> u_hat)) <span class="sc">+</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="assignment7_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the result above, the near zero R-square tells us that our regress model u on x is not better than a horizontal line due to the estimated u is not correlated with all of the explanatory variables. This is also indicated from the summary of regression of u on x where all of the estimated coefficient are not significant</p></li>
+<li><p>Now, compute the Breusch-Pagan test for heteroskedasticity. Use the <span class="math inline">\(F\)</span> statistic version and report the <span class="math inline">\(p\)</span>-value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>u_hat_model_bp <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> u_hat_data, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> u_hat<span class="sc">^</span><span class="dv">2</span> <span class="sc">~</span> prtystrA <span class="sc">+</span> democA <span class="sc">+</span> lexpendA <span class="sc">+</span> lexpendB)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>u_hat_model_bp_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(u_hat_model_bp)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>f_test_result <span class="ot">&lt;-</span> <span class="fu">pf</span>(<span class="at">q=</span>u_hat_model_bp_summary<span class="sc">$</span>fstatistic[<span class="dv">1</span>], <span class="dv">4</span>, <span class="dv">168</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(u_hat_model_bp, </span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">"text"</span>,</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"The Breusch-Pagan test"</span>,</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">intercept.bottom =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">star.cutoffs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+The Breusch-Pagan test
+=================================================
+                         Dependent variable:     
+                    -----------------------------
+                               u_hat2            
+-------------------------------------------------
+Constant                      113.963*           
+                              (50.815)           
+
+prtystrA                       -0.299            
+                               (0.765)           
+
+democA                         15.619            
+                              (15.091)           
+
+lexpendA                      -10.306*           
+                               (4.204)           
+
+lexpendB                       -0.051            
+                               (4.265)           
+
+-------------------------------------------------
+Observations                     173             
+R2                              0.053            
+Adjusted R2                     0.030            
+Residual Std. Error       81.255 (df = 168)      
+F Statistic              2.330 (df = 4; 168)     
+=================================================
+Note:               *p&lt;0.05; **p&lt;0.01; ***p&lt;0.001</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"P-value of F-statistic: "</span>, f_test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "P-value of F-statistic: 0.058057501107012"</code></pre>
+</div>
+</div>
+<p>The bp test can be done by regressing u_hat_square on our explanatory variables. From the result above we have a f-statistic of 2.33 which has p-value of 0.058 which is just larger at 5% significant level. From the estimated coefficient we can also see that several coefficient are statistically significant. It might be that we have heteroskedasticity, but we are not very sure of it.</p></li>
+<li><p>Compute the special case of the White test for heteroskedasticity, again using the <span class="math inline">\(F\)</span> statistic form. How strong is the evidence for heteroskedasticity now?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>u_hat_model_white <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> u_hat_data, </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> <span class="fu">I</span>(u_hat<span class="sc">^</span><span class="dv">2</span>) <span class="sc">~</span> vote1_model<span class="sc">$</span>fit <span class="sc">+</span> <span class="fu">I</span>(vote1_model<span class="sc">$</span>fit<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>u_hat_model_white_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(u_hat_model_white)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(u_hat_model_white, </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">"text"</span>,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"The Breusch-Pagan test"</span>,</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">intercept.bottom =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">star.cutoffs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+The Breusch-Pagan test
+=================================================
+                         Dependent variable:     
+                    -----------------------------
+                              I(u_hat2)          
+-------------------------------------------------
+Constant                      171.858**          
+                              (53.142)           
+
+fit                            -4.264            
+                               (2.167)           
+
+fit2)                           0.036            
+                               (0.021)           
+
+-------------------------------------------------
+Observations                     173             
+R2                              0.032            
+Adjusted R2                     0.020            
+Residual Std. Error       81.659 (df = 170)      
+F Statistic              2.786 (df = 2; 170)     
+=================================================
+Note:               *p&lt;0.05; **p&lt;0.01; ***p&lt;0.001</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>f_test_result <span class="ot">&lt;-</span> <span class="fu">pf</span>(<span class="at">q=</span>u_hat_model_white_summary<span class="sc">$</span>fstatistic[<span class="dv">1</span>], <span class="dv">2</span>, <span class="dv">170</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"P-value of F-statistic: "</span>, f_test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "P-value of F-statistic: 0.0644961836332965"</code></pre>
+</div>
+</div>
+<p>Here, from the white test, we can see that we also have larger p-value compared to our threshold (0.05) and also slightly larger than BP calculation. However, we are still not pretty confident to accept the null.</p></li>
 </ol>
 </section>
 

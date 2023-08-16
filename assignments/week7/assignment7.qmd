@@ -1,5 +1,5 @@
 ---
-title: "assignment6"
+title: "assignment7"
 author: "Abdullah Faqih Al Mubarok"
 format: html
 editor: visual
@@ -441,7 +441,7 @@ Use `vote1` for this exercise.
 
     summary(u_hat_model)
 
-    paste0("Near zero u_hat (<1): ", length(u_hat_dat[u_hat_data$u_hat<1]$u_hat))
+    paste0("Near zero u_hat (<1): ", length(u_hat_data[u_hat_data$u_hat<1,]$u_hat))
 
     ggplot(data = u_hat_data, mapping = aes(x = u_hat)) + 
       geom_density()

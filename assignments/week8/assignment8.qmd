@@ -1,0 +1,319 @@
+---
+title: "assignment8"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+Today's exercises are based mainly on Chapter 9 in Wooldridge (2018). Some questions from previous chapters may also be included. In addition, the questions you may not have solved last week should be considered prerequisites to this exercise set. Feel free to post questions either by [mail](mailto:cep@ifro.ku.dk) or the discussion forum [here](https://ucph.padlet.org/carlemilpless/questions-ehvgql4yj517uhb3). I will monitor both during the day and will be available for questions.
+
+::: {.callout-important}
+Please remember that there is likely a large overlap between the contents of the readings, the smaller lectures and plenary sessions, and the videos I've provided. I do not expect you to spend **time** on all these different elements, but I expect you to choose whichever you learn the most from. In the end, the exercises are the ones that closest resemble what you can expect from the exam.
+:::
+
+Unless stated otherwise, the primary source of data we will be using is from the `wooldridge` package. Remember, you can access them directly in `R` with the following code:
+
+```{r}
+#| warning: false
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+library(lmtest)
+library(car)
+library(sandwich)
+hprice1_data <- hprice1
+```
+
+## Problem 8.1: Simulation Example
+First, we want to generate an artificial data set with 100 observations where:
+\begin{align*}
+    x&\in[0,1] \\
+    u&\sim \mathcal{N}(0, 0.0025) \\
+    y &= 1 - x+2x^2 + u
+\end{align*}
+Using `R`, we can generate this artificial data set with the following snippet of code:
+
+```{r}
+nObs = 100
+x = runif(nObs)
+u = rnorm(nObs, sd = 0.0025)
+y = 1 - x + 2 * x^2 + u
+```
+
+1. Estimate the linear model:
+\begin{align*}
+        y = \alpha_0 + \alpha_1 x + v,
+\end{align*}
+where $v$ is just some new error term with a zero conditional expectation. 
+```{r}
+artif_data = data.frame("x" = x, "u" = u, "y_true" = y)
+est_model <- lm(data = artif_data, 
+                formula = y ~ x)
+
+stargazer(est_model, type = "text")
+
+artif_data <- artif_data |> 
+  mutate("y_hat" = est_model$fit)
+```
+
+
+2. Make a scatter plot between $x$ and $y$ and add the estimated linear regression line. 
+```{r}
+ggplot(data = artif_data, mapping = aes(x = x, y = y)) + 
+  geom_point() + 
+  geom_smooth(method = lm) + 
+  labs(title = "Scatter Plot of Data") +
+  theme_bw()
+```
+
+2. Make a scatter plot between $x$ and $\hat{v}$. Recall that $\hat{v}$ are found by finding the estimated residuals of the linear model from 1. 
+```{r}
+artif_data <- artif_data |> 
+  mutate("u_hat" = est_model$residuals)
+
+ggplot(data = artif_data, mapping = aes(x = x, y = u_hat)) + 
+  geom_point() + 
+  labs(title = "Scatter Plot of Data") +
+  theme_bw()
+```
+
+
+3. Which assumptions of the linear regression model are violated?
+for MLR.1 it is okay since our population model is linear
+MLR.2 is also okay since our samples are randomly picked from normal distribution 
+MLR.3 is not violated since we have variation on x
+MLR.4 seems to be violated since the estimated residual depends on x (looks like a quadratic function) on the previous plot
+MLR.5 is violated because the variance is difference accross x. 
+
+
+4. How could you test whether or not these assumptions are fulfilled?
+FOr MLR.1 - 3 we don't have to tes them since it's already stated on the problem set.
+
+However, to test the MLR.4 we can regress u_hat on x: 
+```{r}
+u_hat_model <- lm(data = artif_data, 
+                  formula = u_hat ~ x)
+
+stargazer(u_hat_model, type = "text")
+```
+From the above result we can see that the coefficient on x is zero. However it is not statistically significant event at 10% level, hence we can't reject the null which stated that the x coefficent is zero. However, it might be due to our model is not appropiate. We suspect that there is a quadratic relationship of x on u_hat. Therefore, we do another test for that: 
+```{r}
+u_hat_model <- lm(data = artif_data, 
+                  formula = u_hat ~ x + I(x^2))
+
+stargazer(u_hat_model, type = "text")
+```
+From the above result, we can see that the association between u_hat and x is statistically significant. Hence, the assumption of MLR.3 does not hold.
+
+
+For MLR.5 we can use BP test since homoskedasticity assume that E(x|u) = 0 (which is not as we prove above), therefore we can use any homoskedasticity test. Here we choose the BP test and using the F-test whether to reject or accept the null.  
+```{r}
+bp_model <- lm(data = artif_data, 
+                  formula = I(u_hat^2) ~ x)
+stargazer(bp_model, type = "text")
+
+f_statistic <- (summary(bp_model))$fstatistic[1]
+
+paste0("F-test result: ", pf(f_statistic, 1, 98, lower.tail = FALSE))
+```
+From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is heteroskedasticity.
+
+## Problem 8.2: Functional Form Misspecification
+1. Using the data set `hprice1` from the `wooldridge` package, estimate the model:
+\begin{align*}
+        price = \beta_0 + \beta_1 lotsize + \beta_2 sqrft + \beta_3 bdrms + u,
+\end{align*}
+and carry out a test determining whether any quadratic terms should be included.
+To do that we can have restricted-F test where the restricted test is the model without the quadratif terms. 
+```{r}
+hprice1_model <- lm(data = hprice1_data,
+                    formula = price ~ lotsize + sqrft + bdrms)
+hprice1_model2 <- lm(data = hprice1_data,
+                    formula = price ~ lotsize + I(lotsize^2) + sqrft + I(sqrft^2) + bdrms + I(bdrms^2))
+anova(hprice1_model, hprice1_model2)
+```
+From the restricted-F-test above, the p-value is statistically significant even at 1% level. Therefore, we can't reject the null hypothesis which stated that all of the added coefficent are zero.
+
+2. Instead, you should now estimate the model:
+\begin{align*}
+        \log(price) = \beta_0 + \beta_1 \log(lotsize) + \beta_2 \log(sqrft) + \beta_3 bdrms + u,
+\end{align*}
+where you again test whether any quadratic terms should be included. What about cubic terms or interactions?
+Again we do the same restricted f-test like we did before: 
+```{r}
+hprice1_log_model <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + log(sqrft) + bdrms)
+hprice1_log_model2 <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + I(log(lotsize)^2) + log(sqrft) + I(log(sqrft)^2) + bdrms + I(bdrms^2))
+anova(hprice1_log_model, hprice1_log_model2)
+```
+Fomr the test result we can see that hte p-value is greater than our threshold (0.05). Hence, we can not reject the null hypothesis even at 10% level. Thus, the quadratic terms of the log() of explanatory variables should not be included. 
+
+For cubic terms: 
+```{r}
+hprice1_log_model <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + log(sqrft) + bdrms)
+hprice1_log_model2 <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + I(log(lotsize)^3) + log(sqrft) + I(log(sqrft)^3) + bdrms + I(bdrms^3))
+anova(hprice1_log_model, hprice1_log_model2)
+```
+The cubic terms are also should not be included since the p-value of the restricted-F-test is greater than our threshold (0.05). 
+
+Finally for the interaction terms: 
+```{r}
+hprice1_log_model <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + log(sqrft) + bdrms)
+hprice1_log_model2 <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + log(lotsize):log(sqrft) + log(sqrft) + log(sqrft):bdrms + bdrms + bdrms:log(lotsize))
+anova(hprice1_log_model, hprice1_log_model2)
+```
+Also the same, for the interaction, we can't reject the null hence we should not include the interaction term. 
+
+
+3. Apply Ramsey's RESET (with squared and cubic fitted dependent variables) to the two models for housing prices from 1 and 2. What do you conclude? How do these results compare to your findings from 1 and 2? 
+```{r}
+hprice1_model5 <- lm(data = hprice1_data,
+                    formula = price ~ lotsize + I(lotsize^2) + lotsize:sqrft + sqrft + I(sqrft^2) + sqrft:bdrms + bdrms + I(bdrms^2) + bdrms:lotsize)
+
+
+hprice1_model6 <- lm(data = hprice1_data,
+                    formula = log(price) ~ log(lotsize) + I(log(lotsize)^2) + log(lotsize):log(sqrft) + log(sqrft) + I(log(sqrft)^2) + log(sqrft):bdrms + bdrms + I(bdrms^2) + bdrms:log(lotsize))
+
+resettest(hprice1_model5)
+resettest(hprice1_model6)
+
+```
+From the above result, the two p-values are both statistically not significant. However, the log() form is smaller which might indicate that it is better model compared to the non-log() form. However, our RESET test suggest that for both non-log and log form, the model specification are not correct. It might be due to the additional squared and cubic fitted. 
+
+## Problem 8.3: Proxy Variables
+1. What makes a good proxy variable? Throughout the course, we have discussed a wage model of the form:
+\begin{align*}
+        \log(wage) = \beta_0 + \beta_1 educ + \beta_2 exper + u,
+\end{align*}
+where one of the inherent problems was how we could measure general ability in the workplace. Would $IQ$ make for a good proxy of otherwise unobserved ability?
+Yes it will since generally the higher IQ someone has, the higher their ability since they can learn faster. 
+
+2. Now include $IQ$ in the above linear model. Estimate the model using the data in `wage2`. Report your results. How does this model compare to the restricted one from 1? 
+```{r}
+wage2_data <- wage2
+wage_model = lm(data = wage2_data, 
+                      formula = log(wage) ~ educ + exper)
+
+# assuming homoskedasticity, we use standard error 
+se_wage_model = vcov(wage_model)
+
+proxy_wage_model = lm(data = wage2_data, 
+                      formula = log(wage) ~ educ + exper + IQ)
+
+stargazer(wage_model, proxy_wage_model, type = "text")
+```
+From the result above we could see that the IQ is statistically significant event at 1% level, hence we can reject that null hypotheses that IQ coeff is zero. In addition, we can also see that the coefficent value of education is smaller on the second estimation result. This is due to on the first estimation we excluded the IQ whic made our estimation is too high since we omitted ability (in this case IQ as the proxy). In addition, our R-squared is better. 
+
+## Problem 8.4: Outliers and Influential Observations
+Start by loading the data set `rdchem` from the `wooldridge` package. 
+
+1. Estimate the model 
+\begin{align*}
+        rdintens = \beta_0 + \beta_1 sales + \beta_2 profmarg + u,
+\end{align*}
+and report your findings.
+```{r}
+rdchem_data <- rdchem
+rdchem_model <- lm(data = rdchem_data, 
+                  formula = rdintens ~ sales + profmarg)
+
+stargazer(rdchem_model, type = "text")
+
+paste0("F-test p-value: ", pf(q = summary(rdchem_model)$fstatistic[1], 
+                              df1 = 2, df2 = 29, lower.tail = FALSE))
+```
+From the estimation result above we can see that the p-value of the f-test is 0.31 which is higher even at 10% significant level. Hence, we expect that sales and profmarg do not have effect on the percentage of between R&D and sales. 
+
+2. Make a scatter plot of $sales$ and $rdintens$ and add the fitted values of $rdintens$ as a function of $sales$ to the plot. An outlier should appear (very large value of $sales$ compared to the other firms). 
+```{r}
+rdchem_data <- rdchem_data |> mutate(fitted = rdchem_model$fitted.values)
+
+ggplot(data = rdchem_data, mapping = aes(x = sales, y = rdintens)) + 
+  geom_point() + 
+  geom_point(mapping = aes(y = fitted), color = "blue", alpha = 0.5) +
+  geom_smooth(method = "lm", color = "blue", se = FALSE, linetype = "dashed") + 
+  theme_bw() 
+```
+From the plot above we can se there are a company which has very high sales >30000
+
+3. Remove the observation that has an extreme value of $sales$. Re-estimate the model from (i) and report your findings. Add the new fitted values of $rdintens$ as a function $sales$ to the plot from before. 
+```{r}
+rdchem_model2 <- lm(data = rdchem_data |> filter(sales<=30000), 
+                  formula = rdintens ~ sales + profmarg)
+
+rdchem_data_2 <- rdchem_data |> filter(sales<=30000) |> mutate(fitted = rdchem_model2$fitted.values)
+
+
+ggplot(data = rdchem_data_2, mapping = aes(x = sales, y = rdintens)) + 
+  geom_point() + 
+  geom_point(data = rdchem_data, mapping = aes(y = fitted), 
+             color = "blue", alpha = 0.5) +
+  geom_point(mapping = aes(y = fitted), 
+             color = "red", alpha = 0.5) +
+  geom_smooth(data = rdchem_data, method = "lm", color = "blue", 
+              se = FALSE, linetype = "dashed") + 
+  geom_smooth(method = "lm", color = "red", 
+              se = FALSE, linetype = "dashed") + 
+  theme_bw() 
+
+
+```
+
+
+4. Compare the estimated coefficients, $R^2$-values, and the fitted values of the two models. Based on your findings, should we keep the observation with the extreme value of $sales$, or should we discard it completely?
+```{r}
+stargazer(rdchem_model, rdchem_model2, type = "text")
+```
+Based on the result above, we can see that the model with excluded outlier has better to fit the data with higher R-square. In addition, the sales is now statistically significant even at 1% level and also double the marginal effect. However, we still can see that despite it is better than the previous one, our model tends to poorly fit the data since it only explain 17.3% variability. 
+
+5. Can you come up with any other ways to deal with this issue?
+One idea to correct the issue is to revisit our model. Currently, we are only looking into the sales as well as the pformarg. However, we can easily see that the rdintens is highly correlated with rd (r&d spending) as well as the sales. In addition, one big factor of a company can confidently do research is that they have enough cash which reflected from the net profit.  
+Other than that, other thing that we can do is to transform several variables into log() especially variables which are in high amount of dollar. In addition, we can also test whether we need any quadratic correlation on the model is present. 
+
+First we need to check whether transforming log(sales) give a better fit: 
+```{r}
+rdchem_data <- rdchem_data |> mutate(lrd = log(rd), lprofits = log(profits))
+rdchem_model3 <- lm(data = rdchem_data, 
+                  formula = rdintens ~ lsales + lrd + profits)
+
+
+rechem_data3 <- rdchem_data |> mutate(fitted = rdchem_model3$fitted.values)
+stargazer(rdchem_model3, type = "text")
+paste0("F-test p-value: ", pf(q = summary(rdchem_model3)$fstatistic[1], 
+                              df1 = 2, df2 = 29, lower.tail = FALSE))
+
+
+ggplot(data = rechem_data3, mapping = aes(x = lsales, y = rdintens)) + 
+  geom_point() + 
+  geom_point(mapping = aes(y = fitted), 
+             color = "orange", alpha = 0.5) +
+  geom_smooth(data = rdchem_data, method = "lm", color = "orange", 
+              se = FALSE, linetype = "dashed") + 
+  theme_bw() 
+
+
+```
+From the above result w can see that our model is now far way better to fit the data as we can see from the 0.911 R-square. All of the explanatory variables are statistically significant even at 1% level except for profit. This is not what we expected earlier. It might be due to profit has quadratic relation with rdintens. Therefore, we need to test it with RESET for possibly other quadratic relation. 
+
+
+```{r}
+# Here we test whether there is any quadratic or cubic relationship 
+resettest(data = rdchem_data, 
+          formula = rdintens ~ lsales + lrd + profits,
+          power = c(2))
+```
+from the result above, the p-value is very small which indicates that we can confidently reject the null. Therefore, it might be a quadratic relationship on our explanatory variables. I suspected that it is the profits. Therefore we need to do restricted F-test for it. 
+
+```{r}
+rdchem_model4 <- lm(data = rdchem_data, 
+                  formula = rdintens ~ lsales + lrd + profits + I(lsales^2))
+
+anova(rdchem_model4, rdchem_model3)
+```
+However, based on the above test the additional explanatory variable which is the sales^2 is not significant. 
+
