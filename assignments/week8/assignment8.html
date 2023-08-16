@@ -158,18 +158,18 @@ Important
                     ---------------------------
                                  y             
 -----------------------------------------------
-x                            1.082***          
+x                            0.993***          
                               (0.053)          
                                                
-Constant                     0.626***          
-                              (0.033)          
+Constant                     0.664***          
+                              (0.030)          
                                                
 -----------------------------------------------
 Observations                    100            
-R2                             0.812           
-Adjusted R2                    0.810           
+R2                             0.781           
+Adjusted R2                    0.779           
 Residual Std. Error       0.151 (df = 98)      
-F Statistic           422.293*** (df = 1; 98)  
+F Statistic           349.464*** (df = 1; 98)  
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -182,7 +182,7 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> artif_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm) <span class="sc">+</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scatter Plot of Data"</span>) <span class="sc">+</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -201,15 +201,18 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> artif_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> u_hat)) <span class="sc">+</span> </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scatter Plot of Data"</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> est_model<span class="sc">$</span>residuals <span class="sc">~</span> x, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scatter Plot of Data"</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="assignment8_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>We can see that the x regress on u_hat is just a horizontal line</p>
 <ol start="3" type="1">
 <li><p>Which assumptions of the linear regression model are violated? for MLR.1 it is okay since our population model is linear MLR.2 is also okay since our samples are randomly picked from normal distribution MLR.3 is not violated since we have variation on x MLR.4 seems to be violated since the estimated residual depends on x (looks like a quadratic function) on the previous plot MLR.5 is violated because the variance is difference accross x.</p></li>
-<li><p>How could you test whether or not these assumptions are fulfilled? FOr MLR.1 - 3 we don’t have to tes them since it’s already stated on the problem set.</p></li>
+<li><p>How could you test whether or not these assumptions are fulfilled? FOr MLR.1 - 3 we don’t have to test them since it’s already stated on the problem set.</p></li>
 </ol>
 <p>However, to test the MLR.4 we can regress u_hat on x:</p>
 <div class="cell">
@@ -224,11 +227,11 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                                u_hat           
 -----------------------------------------------
-x                              0.000           
+x                             -0.000           
                               (0.053)          
                                                
-Constant                      -0.000           
-                              (0.033)          
+Constant                       0.000           
+                              (0.030)          
                                                
 -----------------------------------------------
 Observations                    100            
@@ -253,21 +256,21 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                                u_hat           
 -----------------------------------------------
-x                            -2.081***         
-                              (0.004)          
-                                               
-I(x2)                        2.001***          
+x                            -1.997***         
                               (0.003)          
                                                
-Constant                     0.373***          
+I(x2)                        2.004***          
+                              (0.003)          
+                                               
+Constant                     0.336***          
                               (0.001)          
                                                
 -----------------------------------------------
 Observations                    100            
 R2                             1.000           
 Adjusted R2                    1.000           
-Residual Std. Error       0.003 (df = 97)      
-F Statistic         175,630.900*** (df = 2; 97)
+Residual Std. Error       0.002 (df = 97)      
+F Statistic         178,428.700*** (df = 2; 97)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -285,18 +288,18 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                              I(u_hat2)         
 -----------------------------------------------
-x                            -0.020**          
-                              (0.009)          
+x                             -0.003           
+                              (0.008)          
                                                
-Constant                     0.034***          
+Constant                     0.024***          
                               (0.005)          
                                                
 -----------------------------------------------
 Observations                    100            
-R2                             0.055           
-Adjusted R2                    0.045           
-Residual Std. Error       0.025 (df = 98)      
-F Statistic            5.680** (df = 1; 98)    
+R2                             0.002           
+Adjusted R2                   -0.009           
+Residual Std. Error       0.024 (df = 98)      
+F Statistic             0.163 (df = 1; 98)     
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -304,10 +307,10 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test result: "</span>, <span class="fu">pf</span>(f_statistic, <span class="dv">1</span>, <span class="dv">98</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "F-test result: 0.019086354025476"</code></pre>
+<pre><code>[1] "F-test result: 0.687374865888117"</code></pre>
 </div>
 </div>
-<p>From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is heteroskedasticity.</p>
+<p>From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is having heteroskedasticity.</p>
 </section>
 <section id="problem-8.2-functional-form-misspecification" class="level2">
 <h2 class="anchored" data-anchor-id="problem-8.2-functional-form-misspecification">Problem 8.2: Functional Form Misspecification</h2>
@@ -335,7 +338,7 @@ Model 2: price ~ lotsize + I(lotsize^2) + sqrft + I(sqrft^2) + bdrms +
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>From the restricted-F-test above, the p-value is statistically significant even at 1% level. Therefore, we can’t reject the null hypothesis which stated that all of the added coefficent are zero.</p>
+<p>From the restricted-F-test above, the p-value is statistically significant even at 1% level. thus, we can’t reject the null hypothesis which stated that all of the added coefficent are zero (there are quadratic relationship).</p>
 <ol start="2" type="1">
 <li>Instead, you should now estimate the model: <span class="math display">\[\begin{align*}
      \log(price) = \beta_0 + \beta_1 \log(lotsize) + \beta_2 \log(sqrft) + \beta_3 bdrms + u,
@@ -401,31 +404,43 @@ Model 2: log(price) ~ log(lotsize) + log(lotsize):log(sqrft) + log(sqrft) +
 <li>Apply Ramsey’s RESET (with squared and cubic fitted dependent variables) to the two models for housing prices from 1 and 2. What do you conclude? How do these results compare to your findings from 1 and 2?</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>hprice1_model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> hprice1_data,</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> price <span class="sc">~</span> lotsize <span class="sc">+</span> <span class="fu">I</span>(lotsize<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> lotsize<span class="sc">:</span>sqrft <span class="sc">+</span> sqrft <span class="sc">+</span> <span class="fu">I</span>(sqrft<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> sqrft<span class="sc">:</span>bdrms <span class="sc">+</span> bdrms <span class="sc">+</span> <span class="fu">I</span>(bdrms<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> bdrms<span class="sc">:</span>lotsize)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>hprice1_model6 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> hprice1_data,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> <span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(lotsize) <span class="sc">+</span> <span class="fu">I</span>(<span class="fu">log</span>(lotsize)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">log</span>(lotsize)<span class="sc">:</span><span class="fu">log</span>(sqrft) <span class="sc">+</span> <span class="fu">log</span>(sqrft) <span class="sc">+</span> <span class="fu">I</span>(<span class="fu">log</span>(sqrft)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">log</span>(sqrft)<span class="sc">:</span>bdrms <span class="sc">+</span> bdrms <span class="sc">+</span> <span class="fu">I</span>(bdrms<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> bdrms<span class="sc">:</span><span class="fu">log</span>(lotsize))</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_model5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_model, <span class="at">power=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     RESET test
 
-data:  hprice1_model5
-RESET = 0.49412, df1 = 2, df2 = 76, p-value = 0.6121</code></pre>
+data:  hprice1_model
+RESET = 9.3876, df1 = 1, df2 = 83, p-value = 0.002946</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_model6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_log_model, <span class="at">power=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     RESET test
 
-data:  hprice1_model6
-RESET = 1.025, df1 = 2, df2 = 76, p-value = 0.3637</code></pre>
+data:  hprice1_log_model
+RESET = 5.122, df1 = 1, df2 = 83, p-value = 0.02623</code></pre>
 </div>
 </div>
-<p>From the above result, the two p-values are both statistically not significant. However, the log() form is smaller which might indicate that it is better model compared to the non-log() form. However, our RESET test suggest that for both non-log and log form, the model specification are not correct. It might be due to the additional squared and cubic fitted.</p>
+<p>From the above result, for the quadratic explanatory variables we have the same results as we did previously where the non log() model can’t reject the null where all of the quadratic explanatory variables are zero. For the log() model we also see the same result as we did earlier where it is not a good idea to include the quadratic form into the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_model, <span class="at">power=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    RESET test
+
+data:  hprice1_model
+RESET = 7.9123, df1 = 1, df2 = 83, p-value = 0.006127</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(hprice1_log_model, <span class="at">power=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    RESET test
+
+data:  hprice1_log_model
+RESET = 2.3601, df1 = 1, df2 = 83, p-value = 0.1283</code></pre>
+</div>
+</div>
+<p>We also have the same result for the cubic.</p>
 </section>
 <section id="problem-8.3-proxy-variables" class="level2">
 <h2 class="anchored" data-anchor-id="problem-8.3-proxy-variables">Problem 8.3: Proxy Variables</h2>
@@ -436,17 +451,17 @@ RESET = 1.025, df1 = 2, df2 = 76, p-value = 0.3637</code></pre>
 <li><p>Now include <span class="math inline">\(IQ\)</span> in the above linear model. Estimate the model using the data in <code>wage2</code>. Report your results. How does this model compare to the restricted one from 1?</p></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>wage2_data <span class="ot">&lt;-</span> wage2</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>wage_model <span class="ot">=</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># assuming homoskedasticity, we use standard error </span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>se_wage_model <span class="ot">=</span> <span class="fu">vcov</span>(wage_model)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>proxy_wage_model <span class="ot">=</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> IQ)</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage_model, proxy_wage_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>wage2_data <span class="ot">&lt;-</span> wage2</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>wage_model <span class="ot">=</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># assuming homoskedasticity, we use standard error </span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>se_wage_model <span class="ot">=</span> <span class="fu">vcov</span>(wage_model)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>proxy_wage_model <span class="ot">=</span> <span class="fu">lm</span>(<span class="at">data =</span> wage2_data, </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">formula =</span> <span class="fu">log</span>(wage) <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> IQ)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(wage_model, proxy_wage_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ===================================================================
@@ -488,11 +503,11 @@ Note:                                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</co
 \end{align*}\]</span> and report your findings.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>rdchem_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> sales <span class="sc">+</span> profmarg)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>rdchem_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> sales <span class="sc">+</span> profmarg)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ===============================================
@@ -518,8 +533,8 @@ F Statistic             1.195 (df = 2; 29)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test p-value: "</span>, <span class="fu">pf</span>(<span class="at">q =</span> <span class="fu">summary</span>(rdchem_model)<span class="sc">$</span>fstatistic[<span class="dv">1</span>], </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">29</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test p-value: "</span>, <span class="fu">pf</span>(<span class="at">q =</span> <span class="fu">summary</span>(rdchem_model)<span class="sc">$</span>fstatistic[<span class="dv">1</span>], </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">29</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "F-test p-value: 0.31727519984558"</code></pre>
 </div>
@@ -529,18 +544,18 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <li>Make a scatter plot of <span class="math inline">\(sales\)</span> and <span class="math inline">\(rdintens\)</span> and add the fitted values of <span class="math inline">\(rdintens\)</span> as a function of <span class="math inline">\(sales\)</span> to the plot. An outlier should appear (very large value of <span class="math inline">\(sales\)</span> compared to the other firms).</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model<span class="sc">$</span>fitted.values)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rdchem_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> sales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model<span class="sc">$</span>fitted.values)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rdchem_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> sales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="assignment8_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="assignment8_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>From the plot above we can se there are a company which has very high sales &gt;30000</p>
@@ -548,36 +563,36 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <li>Remove the observation that has an extreme value of <span class="math inline">\(sales\)</span>. Re-estimate the model from (i) and report your findings. Add the new fitted values of <span class="math inline">\(rdintens\)</span> as a function <span class="math inline">\(sales\)</span> to the plot from before.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>rdchem_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(sales<span class="sc">&lt;=</span><span class="dv">30000</span>), </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> sales <span class="sc">+</span> profmarg)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>rdchem_data_2 <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(sales<span class="sc">&lt;=</span><span class="dv">30000</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model2<span class="sc">$</span>fitted.values)</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rdchem_data_2, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> sales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> rdchem_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> rdchem_data, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, </span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"red"</span>, </span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rdchem_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(sales<span class="sc">&lt;=</span><span class="dv">30000</span>), </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> sales <span class="sc">+</span> profmarg)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>rdchem_data_2 <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(sales<span class="sc">&lt;=</span><span class="dv">30000</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model2<span class="sc">$</span>fitted.values)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rdchem_data_2, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> sales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> rdchem_data, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> rdchem_data, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"red"</span>, </span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
 `geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="assignment8_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="assignment8_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ol start="4" type="1">
 <li>Compare the estimated coefficients, <span class="math inline">\(R^2\)</span>-values, and the fitted values of the two models. Based on your findings, should we keep the observation with the extreme value of <span class="math inline">\(sales\)</span>, or should we discard it completely?</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model, rdchem_model2, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model, rdchem_model2, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ==========================================================
@@ -612,19 +627,19 @@ Other than that, other thing that we can do is to transform several variables in
 </ol>
 <p>First we need to check whether transforming log(sales) give a better fit:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">lrd =</span> <span class="fu">log</span>(rd), <span class="at">lprofits =</span> <span class="fu">log</span>(profits))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>rdchem_data <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">lrd =</span> <span class="fu">log</span>(rd), <span class="at">lprofits =</span> <span class="fu">log</span>(profits))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There was 1 warning in `mutate()`.
 ℹ In argument: `lprofits = log(profits)`.
 Caused by warning in `log()`:
 ! NaNs produced</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>rdchem_model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>rechem_data3 <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model3<span class="sc">$</span>fitted.values)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model3, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>rdchem_model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>rechem_data3 <span class="ot">&lt;-</span> rdchem_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">fitted =</span> rdchem_model3<span class="sc">$</span>fitted.values)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(rdchem_model3, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ===============================================
@@ -653,31 +668,31 @@ F Statistic           95.298*** (df = 3; 28)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test p-value: "</span>, <span class="fu">pf</span>(<span class="at">q =</span> <span class="fu">summary</span>(rdchem_model3)<span class="sc">$</span>fstatistic[<span class="dv">1</span>], </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">29</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test p-value: "</span>, <span class="fu">pf</span>(<span class="at">q =</span> <span class="fu">summary</span>(rdchem_model3)<span class="sc">$</span>fstatistic[<span class="dv">1</span>], </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">df1 =</span> <span class="dv">2</span>, <span class="at">df2 =</span> <span class="dv">29</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "F-test p-value: 1.78326298830743e-13"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rechem_data3, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> lsales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> rdchem_data, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"orange"</span>, </span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rechem_data3, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> lsales, <span class="at">y =</span> rdintens)) <span class="sc">+</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> fitted), </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> rdchem_data, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"orange"</span>, </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="assignment8_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<p><img src="assignment8_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>From the above result w can see that our model is now far way better to fit the data as we can see from the 0.911 R-square. All of the explanatory variables are statistically significant even at 1% level except for profit. This is not what we expected earlier. It might be due to profit has quadratic relation with rdintens. Therefore, we need to test it with RESET for possibly other quadratic relation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we test whether there is any quadratic or cubic relationship </span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(<span class="at">data =</span> rdchem_data, </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits,</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">power =</span> <span class="fu">c</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we test whether there is any quadratic or cubic relationship </span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(<span class="at">data =</span> rdchem_data, </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">power =</span> <span class="fu">c</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     RESET test
@@ -688,10 +703,10 @@ RESET = 719.59, df1 = 1, df2 = 27, p-value &lt; 2.2e-16</code></pre>
 </div>
 <p>from the result above, the p-value is very small which indicates that we can confidently reject the null. Therefore, it might be a quadratic relationship on our explanatory variables. I suspected that it is the profits. Therefore we need to do restricted F-test for it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>rdchem_model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits <span class="sc">+</span> <span class="fu">I</span>(lsales<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rdchem_model4, rdchem_model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>rdchem_model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> rdchem_data, </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">formula =</span> rdintens <span class="sc">~</span> lsales <span class="sc">+</span> lrd <span class="sc">+</span> profits <span class="sc">+</span> <span class="fu">I</span>(lsales<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rdchem_model4, rdchem_model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 

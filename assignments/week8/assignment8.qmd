@@ -61,7 +61,7 @@ artif_data <- artif_data |>
 ```{r}
 ggplot(data = artif_data, mapping = aes(x = x, y = y)) + 
   geom_point() + 
-  geom_smooth(method = lm) + 
+  geom_smooth(method = lm, se = FALSE) + 
   labs(title = "Scatter Plot of Data") +
   theme_bw()
 ```
@@ -73,10 +73,12 @@ artif_data <- artif_data |>
 
 ggplot(data = artif_data, mapping = aes(x = x, y = u_hat)) + 
   geom_point() + 
+  geom_smooth(formula = est_model$residuals ~ x, 
+              method = "lm", se = FALSE) +
   labs(title = "Scatter Plot of Data") +
   theme_bw()
 ```
-
+We can see that the x regress on u_hat is just a horizontal line
 
 3. Which assumptions of the linear regression model are violated?
 for MLR.1 it is okay since our population model is linear
@@ -87,7 +89,7 @@ MLR.5 is violated because the variance is difference accross x.
 
 
 4. How could you test whether or not these assumptions are fulfilled?
-FOr MLR.1 - 3 we don't have to tes them since it's already stated on the problem set.
+FOr MLR.1 - 3 we don't have to test them since it's already stated on the problem set.
 
 However, to test the MLR.4 we can regress u_hat on x: 
 ```{r}
@@ -116,7 +118,7 @@ f_statistic <- (summary(bp_model))$fstatistic[1]
 
 paste0("F-test result: ", pf(f_statistic, 1, 98, lower.tail = FALSE))
 ```
-From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is heteroskedasticity.
+From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is having heteroskedasticity.
 
 ## Problem 8.2: Functional Form Misspecification
 1. Using the data set `hprice1` from the `wooldridge` package, estimate the model:
@@ -132,7 +134,7 @@ hprice1_model2 <- lm(data = hprice1_data,
                     formula = price ~ lotsize + I(lotsize^2) + sqrft + I(sqrft^2) + bdrms + I(bdrms^2))
 anova(hprice1_model, hprice1_model2)
 ```
-From the restricted-F-test above, the p-value is statistically significant even at 1% level. Therefore, we can't reject the null hypothesis which stated that all of the added coefficent are zero.
+From the restricted-F-test above, the p-value is statistically significant even at 1% level. thus, we can't reject the null hypothesis which stated that all of the added coefficent are zero (there are quadratic relationship). 
 
 2. Instead, you should now estimate the model:
 \begin{align*}
@@ -172,18 +174,19 @@ Also the same, for the interaction, we can't reject the null hence we should not
 
 3. Apply Ramsey's RESET (with squared and cubic fitted dependent variables) to the two models for housing prices from 1 and 2. What do you conclude? How do these results compare to your findings from 1 and 2? 
 ```{r}
-hprice1_model5 <- lm(data = hprice1_data,
-                    formula = price ~ lotsize + I(lotsize^2) + lotsize:sqrft + sqrft + I(sqrft^2) + sqrft:bdrms + bdrms + I(bdrms^2) + bdrms:lotsize)
-
-
-hprice1_model6 <- lm(data = hprice1_data,
-                    formula = log(price) ~ log(lotsize) + I(log(lotsize)^2) + log(lotsize):log(sqrft) + log(sqrft) + I(log(sqrft)^2) + log(sqrft):bdrms + bdrms + I(bdrms^2) + bdrms:log(lotsize))
-
-resettest(hprice1_model5)
-resettest(hprice1_model6)
+resettest(hprice1_model, power=2)
+resettest(hprice1_log_model, power=2)
 
 ```
-From the above result, the two p-values are both statistically not significant. However, the log() form is smaller which might indicate that it is better model compared to the non-log() form. However, our RESET test suggest that for both non-log and log form, the model specification are not correct. It might be due to the additional squared and cubic fitted. 
+From the above result, for the quadratic explanatory variables we have the same results as we did previously where the non log() model can't reject the null where all of the quadratic explanatory variables are zero. For the log() model we also see the same result as we did earlier where it is not a good idea to include the quadratic form into the model. 
+
+```{r}
+
+resettest(hprice1_model, power=3)
+resettest(hprice1_log_model, power=3)
+```
+We also have the same result for the cubic.
+
 
 ## Problem 8.3: Proxy Variables
 1. What makes a good proxy variable? Throughout the course, we have discussed a wage model of the form:
