@@ -6,11 +6,17 @@ editor: visual
 ---
 
 ```{r}
-#| eval: false
+#| warning: false
 library(wooldridge)
 library(tidyverse)
 library(stargazer)
+library(lmtest)
+library(car)
+library(sandwich)
 softdrink_data <- get(load("softdrink.RData"))
+wage1_data <- wage1
+hprice1_data <- hprice1
+vote1_data <- vote1
 ```
 
 ## Problem 7.1: Obesity rates (continued)
@@ -175,7 +181,7 @@ We estimate our model:
 
 ```{r}
 # Estimation
-data <- subset(data, volpers > 0)
+data <- subset(softdrink_data, volpers > 0)
 logModel <- lm(log(volpers) ~ log(price) + age + I(age^2) +
     kid06 + kid714 + kid1520 +
     capital + urban + single +
@@ -239,31 +245,62 @@ In an exam situation, I would expect you to spend more time discussing the impli
 
 11. Plot the density of $volpers$ and $\log(volpers)$. Based on the two figures, and your general knowledge, discuss what the difference is of using $\log(volpers)$ as the dependent variable rather than $volpers$.
 
+    ```{r}
+    volper_dist <- softdrink_data |> filter(soft!=0) |>  mutate("log(volpers)" = log(volpers)) |>  select(c("volpers", "log(volpers)")) |> pivot_longer(cols = everything(), names_to = "colname", values_to = "value")
+
+    ggplot(data = volper_dist, mapping = aes(x = value, fill = colname, color = colname)) + 
+      geom_density(alpha = 0.5, bw = 0.05) + 
+      facet_grid(cols = vars(colname), scales = "free") + 
+      labs(title = "volpers and log(volpers) density", 
+           fill = "value", color = "value") + 
+      theme_bw()
+    ```
+
+    From the plot above, we can see that the log() transformation of volpers makes the data distribution closer to the normal distribution which satisfies CLM assumption. In addition it also narrows the range into \[-5.0,2.5\] instead of \[0,15\].
+
 12. Assume that the Classical Linear Model (CLM) assumptions apply. Estimate the proposed model for the population and report your findings in a table. Discuss your results. Are they as you expected?
+
+    The model was already calculated on the 7th question.
 
 13. Calculate a confidence interval for the parameter on single status (`single`). How does this compare to your previous results about the significance of this parameter?
 
+    ```{r}
+    critical_point <- qt(p = 0.001, df = 13856, lower.tail = FALSE)
+    lower_bound_single = round(0.154 - (critical_point*0.018),3)
+    upper_bound_single = round(0.154 + (critical_point*0.018),3)
+
+    paste0("lower bound: ", lower_bound_single, "  upper bound: ", upper_bound_single)
+
+
+    ```
+
+    Since we are the single parameter is significance even at 1% level, we calculated the confidence interval for it with 99% confidence interval. Thus, from the above calculation, the value of single parameter would lie on (0.098,0.21) for 99% of the samples. It is consistent since the range does not contain zero.
+
 14. Test for the joint significance of urbanity (the variables $urban$ and $capital$). Remember to state $H_0$ and $H_1$ when testing.
+
+    To do that, we will use restricted F-test where the restricted model is the one without urban and capital variables. The hypothesis is:
+
+    \begin{align*}
+     H_{0} : \beta_{urban} = \beta_{capita} = 0 \\  H_{1} : \beta_{urban} = 0 or \beta_{capita} = 0
+    \end{align*} \
+    In addition, we set the significance level 5%.
+
+    ```{r}
+    data <- subset(softdrink_data, volpers > 0)
+    logModel_rest <- lm(log(volpers) ~ log(price) + age + I(age^2) +
+        kid06 + kid714 + kid1520 + single +
+        log(totfoodpers), data = data)
+
+    anova(logModel, logModel_rest)
+    anova(logModel_rest, logModel)
+
+    ```
+
+    From the restricted F-test above, we can see that the p-values is lesser than our threshold (5%). It is also significance at 1% level. Thus, we can confidently reject the null hypothesis. In conclusion, we can confidently say that either marginal effect of $urban$ or $capital$ is not zero and choose to keep the two variables on our model.
 
 15. Calculate the partial effects of having children of different ages (i.e. $kid06$, $kid714$, and $kid1520$). Interpret.
 
-### Video 7.3: The Breusch Pagan test for heteroskedasticity
-
-A video on the Breusch Pagan test for heteroscedasticity. A good watch if you need a recap of the readings!
-
-{{< video https://youtu.be/wzLADO24CDk >}}
-
-16. Carry out the Breusch-Pagan test for heteroskedasticity and report the results. Is heteroskedasticity a problem here?
-
-## Video 7.4: The White test for heteroskedasticity
-
-Again, if you just want to make sure you correctly understood the White test for heteroskedasticity, watch this video.
-
-{{< video https://youtu.be/M5xqpKzhyAM >}}
-
-17. Do the special case of the White test for heteroskedasticity. Do you reach the same conclusion as with the Breusch-Pagan test?
-
-18. How can heteroskedasticity influence your estimation? Moreover, what can you do to alleviate the problem of persistent heteroskedasticity?
+    The partial effect for having those three groups of children can be calculated, assuming other factors are held fix, by summing each marginal effect of each children age group. Therefore we have (-0.231 - 0.280 - 0.165)\*100 = -67.6%.
 
 ## Problem 7.2
 
@@ -272,21 +309,118 @@ Use the data in `wage1` for this exercise.
 1.  Using the following hourly wage equation: \begin{align*}
          \widehat{\log(wage)} &=\underset{(.119)}{.389} - \underset{(.168)}{.227}female + \underset{(.008)}{.082} educ \\
          &- \underset{(.0131)}{.0056}female\cdot educ + \underset{(.005)}{.029}exper - \underset{(.00011)}{.00058}exper^2 \\
-         &+ \underset{(.007)}{.032}tenure - \underset{(.00024)}{.00059}tenure^2 \\
+         &+ \underset{(.007)}{.032}tenure + \underset{(.00024)}{.00059}tenure^2 \\
          n&=526, \quad R^2 = .441
     \end{align*} Estimate the gender differential in hourly wage when $educ = 12.5$. Compare this with the estimated differential when $educ = 0$.
 
+    To calculate the difference in gender, the difference between the two is :
+
+    \begin{align*}
+         diff = -0.227 - 0.0056educ
+    \end{align*}
+
+    where $educ = 12.5$, we have:
+
+    \begin{align*}
+         \%\Delta_{wage} = -0.227  - (0.0056*12.5) \\      = -0.297 = -29.7%
+    \end{align*}
+
+    where $educ = 0$, we have:
+
+    \begin{align*}
+         \%\Delta_{wage} = -0.227 = -22.7% 
+    \end{align*}
+
+    From the calculation above we can see that the additional 12.5 years of education adding the difference of -7%.
+
 2.  Run the regression used to obtain the above estimation, but with $female\cdot (educ-12.5)$ replacing $female\cdot educ$. How do you interpret the coefficient on $female$ now?
 
+    ```{r}
+    wage1_model2 <- lm(data = wage1_data, 
+                      formula = log(wage) ~ female + educ + 
+                        I(female*(educ-12.5)) + exper + I(exper^2) + 
+                        tenure + I(tenure^2))
+
+    stargazer(wage1_model2,
+        type = "text",
+        title = "Wage differences with female.(educ-12.5)"
+    )
+
+    paste0("Mean of education: ", mean(wage1_data$educ))
+
+    ```
+
+    From the above regression result, the marginal interaction effect of gender on the education average (assuming 12.5 is the average of education, which is true). In conclusion, the gender difference of being female has partial interaction on education average about -0.6%. Then, for female, where we have educ = 12.5, we will have effect of (-0.296 + -0.006\*(educ-12.5) ) = -0.296 = -29.6% which is the same as the above difference.
+
 3.  Is the coefficient on $female$ in part 1 statistically significant? Compare this with the hourly wage equation from 1 and comment.
+
+    From the above part 1 the significant level can be calculated (assuming homoskedasticity) where we have $H_{0}: \beta _{female} = 0$(two-sided test) :
+
+    ```{r}
+    t_statistic <- (-0.227 - 0 )/0.0131
+    t_test_result <- 2*pt(q = -abs(t_statistic), df = (526-7-1), lower.tail = TRUE)
+    paste0("T-test result: ", t_test_result)
+    ```
+
+    From the result above, we can see that the female coefficient in part 1 is also statistically significant even at 1% significant level. This is also true for the part 2 female coefficient which is also statistically significant even at the same significant level. In conclusion,
 
 ## Problem 7.3
 
 1.  Use the data in `hprice1` to obtain the heteroskedasticity-robust standard errors for equation (8.17). Discuss any important differences with the usual standard errors.
 
+    To do that, we fit 8.17 population model and use the coeftest from lmtest and car package.
+
+    ```{r}
+    hprice1_model <- lm(data = hprice1_data, 
+                        formula <- price ~ lotsize + sqrft + bdrms)
+
+    ggplot(data = data.frame(u = residuals(hprice1_model), fit = fitted(hprice1_model)), 
+           mapping = (aes(x = fit, y = u ))) + 
+      geom_point() + 
+      geom_line(y = 0) + 
+      labs(title = "E(u_hat | y_hat) distribution")
+      theme_bw()
+
+    # Calculate robust se's
+    cov1 = vcovHC(hprice1_model, type = "HC1")
+    robust_se = sqrt(diag(cov1))
+
+
+    coeftest(hprice1_model, vcov = hccm)
+    ```
+
+    As we see from the result above, the heteroskedasticity-robust standard error tends to have larger value. This makes sense since if heteroskedasticity is there on the data, we are having stricter requirement on our estimation. This implies that we are having lesser significant variable which is only the sqrft at 1% level.
+
 2.  Repeat part 1 for equation (8.18).
 
+    ```{r}
+    hprice1_model2 <- lm(data = hprice1_data, 
+                        formula <- log(price) ~ log(lotsize) + log(sqrft) + bdrms)
+
+    ggplot(data = data.frame(u = residuals(hprice1_model2), fit = fitted(hprice1_model)), 
+           mapping = (aes(x = fit, y = u ))) + 
+      geom_point() + 
+      geom_line(y = 0) + 
+      labs(title = "E(u_hat | y_hat) distribution of log() model")
+      theme_bw()
+
+    # Calculate robust se's
+    cov1 = vcovHC(hprice1_model2, type = "HC1")
+    robust_se = sqrt(diag(cov1))
+
+    stargazer(hprice1_model2, hprice1_model2, 
+              type = "text",
+              se = list(NULL, robust_se), # setting to robust se
+              title = "The wage equation",
+              omit.stat = c("ser", "F", "adj.rsq"),
+              intercept.bottom = FALSE,
+              dep.var.labels.include = FALSE
+              )
+    ```
+
 3.  What does this example suggest about heteroskedasticity and the transformation used for the dependent variable?
+
+    Those two fitted model above tells use that having log() transformation will make our variance is not as extreme as before hence making our estimated residuals closer to normal. It is reflected from certainty of our estimations which were greater on the log() transformed model.
 
 ## Problem 7.4
 
@@ -294,6 +428,64 @@ Use `vote1` for this exercise.
 
 1.  Estimate a model with $voteA$ as the dependent variable and $prtystrA$, $democA$, $\log(expendA)$, and $\log(expendB)$ as independent variables. Obtain the OLS residuals, $\hat{u}_i$, and regress these on all of the independent variables. Explain why you obtain $R^2=0$.
 
+    ```{r}
+    vote1_model <- lm(data = vote1_data, 
+                      formula = voteA ~ prtystrA + democA + lexpendA + lexpendB)
+
+    u_hat_data <- vote1_data |> 
+      select(prtystrA, democA, lexpendA, lexpendB) |> 
+      mutate(u_hat = residuals(vote1_model))
+
+    u_hat_model <- lm(data = u_hat_data, 
+                      formula = u_hat ~ prtystrA + democA + lexpendA + lexpendB)
+
+    summary(u_hat_model)
+
+    paste0("Near zero u_hat (<1): ", length(u_hat_dat[u_hat_data$u_hat<1]$u_hat))
+
+    ggplot(data = u_hat_data, mapping = aes(x = u_hat)) + 
+      geom_density()
+    ```
+
+    From the result above, the near zero R-square tells us that our regress model u on x is not better than a horizontal line due to the estimated u is not correlated with all of the explanatory variables. This is also indicated from the summary of regression of u on x where all of the estimated coefficient are not significant
+
 2.  Now, compute the Breusch-Pagan test for heteroskedasticity. Use the $F$ statistic version and report the $p$-value.
 
+    ```{r}
+    u_hat_model_bp <- lm(data = u_hat_data, 
+                      formula = u_hat^2 ~ prtystrA + democA + lexpendA + lexpendB)
+
+    u_hat_model_bp_summary <- summary(u_hat_model_bp)
+
+    f_test_result <- pf(q=u_hat_model_bp_summary$fstatistic[1], 4, 168, lower.tail = FALSE)
+
+    stargazer(u_hat_model_bp, 
+              type = "text",
+              title = "The Breusch-Pagan test",
+              intercept.bottom = FALSE,
+              star.cutoffs = c(0.05, 0.01, 0.001))
+
+    paste0("P-value of F-statistic: ", f_test_result)
+    ```
+
+    The bp test can be done by regressing u_hat_square on our explanatory variables. From the result above we have a f-statistic of 2.33 which has p-value of 0.058 which is just larger at 5% significant level. From the estimated coefficient we can also see that several coefficient are statistically significant. It might be that we have heteroskedasticity, but we are not very sure of it.
+
 3.  Compute the special case of the White test for heteroskedasticity, again using the $F$ statistic form. How strong is the evidence for heteroskedasticity now?
+
+    ```{r}
+    u_hat_model_white <- lm(data = u_hat_data, 
+                      formula = I(u_hat^2) ~ vote1_model$fit + I(vote1_model$fit^2))
+
+    u_hat_model_white_summary <- summary(u_hat_model_white)
+
+    stargazer(u_hat_model_white, 
+              type = "text",
+              title = "The Breusch-Pagan test",
+              intercept.bottom = FALSE,
+              star.cutoffs = c(0.05, 0.01, 0.001))
+
+    f_test_result <- pf(q=u_hat_model_white_summary$fstatistic[1], 2, 170, lower.tail = FALSE)
+    paste0("P-value of F-statistic: ", f_test_result)
+    ```
+
+    Here, from the white test, we can see that we also have larger p-value compared to our threshold (0.05) and also slightly larger than BP calculation. However, we are still not pretty confident to accept the null.

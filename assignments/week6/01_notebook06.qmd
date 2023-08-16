@@ -127,7 +127,7 @@ Please answer the following questions:
     \end{align} Estimate the model and report your results in equation form, with corresponding standard errors, the number of observations, and $R^2$.
 
     ```{r}
-    softdrink_model1 <- lm(data = softdrink_data |> filter(soft==1), 
+    softdrink_model1 <- lm(data = softdrink_data |> filter(soft>0), 
                            formula = log(volpers) ~ log(price) + 
                              age + I(age^2) + kid06 + kid714 + kid1520 + 
                              capital + urban + single + log(totfoodpers) 
