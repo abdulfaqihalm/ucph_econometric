@@ -5,14 +5,6 @@ format: html
 editor: visual
 ---
 
-Today's exercises are based mainly on Chapter 9 in Wooldridge (2018). Some questions from previous chapters may also be included. In addition, the questions you may not have solved last week should be considered prerequisites to this exercise set. Feel free to post questions either by [mail](mailto:cep@ifro.ku.dk) or the discussion forum [here](https://ucph.padlet.org/carlemilpless/questions-ehvgql4yj517uhb3). I will monitor both during the day and will be available for questions.
-
-::: {.callout-important}
-Please remember that there is likely a large overlap between the contents of the readings, the smaller lectures and plenary sessions, and the videos I've provided. I do not expect you to spend **time** on all these different elements, but I expect you to choose whichever you learn the most from. In the end, the exercises are the ones that closest resemble what you can expect from the exam.
-:::
-
-Unless stated otherwise, the primary source of data we will be using is from the `wooldridge` package. Remember, you can access them directly in `R` with the following code:
-
 ```{r}
 #| warning: false
 library(wooldridge)

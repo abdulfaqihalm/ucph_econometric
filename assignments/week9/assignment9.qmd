@@ -1,0 +1,91 @@
+---
+title: "assignment9"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+```{r}
+#| warning: false
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+library(lmtest)
+library(car)
+library(sandwich)
+library(AER)
+kielmc_data <- kielmc
+```
+
+## Problem 9.1 
+Consider a simple model to estimate the effect of personal computer (PC) ownership on college grade point average for graduating seniors at a large public university:
+\begin{align*}
+GPA = \beta_0 + \beta_1 PC + u,
+\end{align*}
+where $PC$ is a binary variable indicating PC ownership.
+
+1. Why might PC ownership be correlated with $u$?
+
+The ownership of PC can be correlated with the student parents' income since it might be not affordable for poor family to have PC (assuming at the time the data was collected, PC was not as affordable as now). 
+
+2. Explain why $PC$ is likely to be related to parents' annual income. Does this mean parental income is a good IV for PC? Why or why not?
+
+As stated before, assuming PC might be not affordable back then, ownership of PC is highly related to the parents' income. With this sense, we have cov(parent_income,PC) not equal to zero. However, parents' income is very related to other unobserved variables such as parent's tenure, education, etc. Hence, cov(parent_income,U) is not zero and violate the assumption of IV. 
+
+3. Suppose that, four years ago, the university gave grants to buy computers to roughly one-half of the incoming students, and the students who received grants were randomly chosen. Carefully explain how you could use this information to construct an instrumental variable for $PC$.
+
+The IV of this might be a dummy variable which is grant. Since grant is randomly assigned to student, it is not related to the unobserverd variables, hence cov(grant,u) = 0. In addition, 
+the grant is expected to be highly correlated with PC ownership, however it might be that there is a group of students which already had pc were also granted PCs by the Uni. This fact does not violate our assumption that cov(gran,x) > 0. In summary, grant can be a good IV for PC. 
+
+## Problem 9.2
+Suppose that you wish to estimate the effect of class attendance on student performance. A basic model is:
+\begin{align*}
+stndfnl = \beta_0 + \beta_1 atndrte + \beta_2 priGPA + \beta_3 ACT + u,
+\end{align*}
+where $stndfnl$ is the standardized outcome on a final exam ($stndfnl$), $atndrte$ is the attendance rate measured in percent of classes attended, $priGPA$ is the prior to university grade point average, and $ACT$ is another test score. 
+
+1. Let $dist$ be the distance from the students' living quarters to the lecture hall. Do you think $dist$ is uncorrelated with $u$?
+
+dist might be correlated with u since non-wealthy students tend to live in affordable housing far away from campus.
+
+2. Assuming that $dist$ and $u$ are uncorrelated, what other assumptions must $dist$ satisfy to be a valid IV for $atndrte$?
+
+if we assume that cov(dist,u)=0, one thing that we need to assure is that the dist has to be correlated with atndrte. In fact, they are since the further the distance of the housing, the higher the chance that students will skip the classes. Hence, dist is a valid IV for atndrte. 
+
+## Problem 9.3 
+Use the data in `KIELMC` for this exercise.
+
+1. The variable $dist$ is the distance from each home to the incinerator site, in feet. Consider the model
+\begin{align*}
+\log(price) = \beta_0 + \delta_0 y81 + \beta_1 \log(dist) + \delta_1\left(y81\times \log(dist)\right)+ u.
+\end{align*}
+The variable $y81$ is a binary indicator variable for whether or not the year is 1981. If building the incinerator reduces the value of homes closer to the site, what is the sign of $\delta_1$? What does it mean if $\beta_1>0$?
+
+The sign of $\delta_1$ means that whether the distance to incinerator in 1981 reduced or increased house price. Meanwhile, if $\beta_1>0$ it means whether the distance from incinerator only actually increased the housing price (assuming other factors are constant). 
+
+2. Estimate the model from part 1. and report the results in the usual form. Interpret the coefficient on $y81\times \log(dist)$. What do you conclude?
+
+```{r}
+kielmc_model <- lm(data = kielmc_data, 
+                   formula = log(price) ~ y81*log(dist))
+
+stargazer(kielmc_model, type = "text")
+```
+From the result above, we can see that only log(dist) is statistically significant even at 1%. However, the other explanatory variables are not statistically significant even at 10% level. It might be due to unobservable variables are correlated with them, hence affecting the estimatino results.
+In addition, the $\delta_1$ means that the addition marginal effect of the distance of the incinerator if it is in 1981. 
+
+3. Add $age$, $age^2$, $rooms$, $baths$, $\log(intst)$, $\log(land)$, and $\log(area)$ to the equation. Now, what do you conclude about the effect of the incinerator on housing values?
+
+```{r}
+kielmc_model2 <- lm(data = kielmc_data, 
+                   formula = log(price) ~ y81*log(dist) + age + I(age^2) + 
+                     rooms + baths + log(intst) + log(land) + log(area))
+
+stargazer(kielmc_model, kielmc_model2, type = "text")
+```
+From the result above, even we added other explanatory variables, the distance of incinerator is now not statistically significant. The estimated marginal effect is also lesser than before since we introduced several other independent variables that we had excluded on previous point (which means we overestimated the marginal effect of dist on part 2). 
+
+
+4. Why is the coefficient on $\log(dist)$ positive and statistically significant in part 2. but not in part 3.? What does this say about the controls used in part 3.?
+
+Since in part 2 the distance from incinerator might be correlated to other factors: expensive house which were large and had lots of rooms might be located far away from incinerator before it was built. Hence, the log(dist) in principal is correlated with unobserved variables (u). Thus, we overestimated its effect in point 2.  

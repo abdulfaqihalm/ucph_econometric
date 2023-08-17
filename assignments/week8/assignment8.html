@@ -103,21 +103,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Today’s exercises are based mainly on Chapter 9 in Wooldridge (2018). Some questions from previous chapters may also be included. In addition, the questions you may not have solved last week should be considered prerequisites to this exercise set. Feel free to post questions either by <a href="mailto:cep@ifro.ku.dk">mail</a> or the discussion forum <a href="https://ucph.padlet.org/carlemilpless/questions-ehvgql4yj517uhb3">here</a>. I will monitor both during the day and will be available for questions.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Please remember that there is likely a large overlap between the contents of the readings, the smaller lectures and plenary sessions, and the videos I’ve provided. I do not expect you to spend <strong>time</strong> on all these different elements, but I expect you to choose whichever you learn the most from. In the end, the exercises are the ones that closest resemble what you can expect from the exam.</p>
-</div>
-</div>
-<p>Unless stated otherwise, the primary source of data we will be using is from the <code>wooldridge</code> package. Remember, you can access them directly in <code>R</code> with the following code:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -158,18 +143,18 @@ Important
                     ---------------------------
                                  y             
 -----------------------------------------------
-x                            0.993***          
-                              (0.053)          
+x                            0.964***          
+                              (0.049)          
                                                
-Constant                     0.664***          
-                              (0.030)          
+Constant                     0.711***          
+                              (0.027)          
                                                
 -----------------------------------------------
 Observations                    100            
-R2                             0.781           
-Adjusted R2                    0.779           
+R2                             0.801           
+Adjusted R2                    0.799           
 Residual Std. Error       0.151 (df = 98)      
-F Statistic           349.464*** (df = 1; 98)  
+F Statistic           393.568*** (df = 1; 98)  
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -227,11 +212,11 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                                u_hat           
 -----------------------------------------------
-x                             -0.000           
-                              (0.053)          
+x                              0.000           
+                              (0.049)          
                                                
-Constant                       0.000           
-                              (0.030)          
+Constant                      -0.000           
+                              (0.027)          
                                                
 -----------------------------------------------
 Observations                    100            
@@ -256,13 +241,13 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                                u_hat           
 -----------------------------------------------
-x                            -1.997***         
+x                            -1.963***         
                               (0.003)          
                                                
-I(x2)                        2.004***          
+I(x2)                        1.999***          
                               (0.003)          
                                                
-Constant                     0.336***          
+Constant                     0.289***          
                               (0.001)          
                                                
 -----------------------------------------------
@@ -270,7 +255,7 @@ Observations                    100
 R2                             1.000           
 Adjusted R2                    1.000           
 Residual Std. Error       0.002 (df = 97)      
-F Statistic         178,428.700*** (df = 2; 97)
+F Statistic         198,609.100*** (df = 2; 97)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -288,18 +273,18 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
                     ---------------------------
                              I(u_hat2)         
 -----------------------------------------------
-x                             -0.003           
-                              (0.008)          
+x                              0.011           
+                              (0.007)          
                                                
-Constant                     0.024***          
-                              (0.005)          
+Constant                     0.017***          
+                              (0.004)          
                                                
 -----------------------------------------------
 Observations                    100            
-R2                             0.002           
-Adjusted R2                   -0.009           
-Residual Std. Error       0.024 (df = 98)      
-F Statistic             0.163 (df = 1; 98)     
+R2                             0.023           
+Adjusted R2                    0.013           
+Residual Std. Error       0.021 (df = 98)      
+F Statistic             2.335 (df = 1; 98)     
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
@@ -307,7 +292,7 @@ Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"F-test result: "</span>, <span class="fu">pf</span>(f_statistic, <span class="dv">1</span>, <span class="dv">98</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "F-test result: 0.687374865888117"</code></pre>
+<pre><code>[1] "F-test result: 0.129718368495579"</code></pre>
 </div>
 </div>
 <p>From the test above we can see that the F statistic is 2.529, which is statistically insignificant even at 10% level. Hence we can not reject the null hypothesis. Therefore, it might be that our sample is having heteroskedasticity.</p>
