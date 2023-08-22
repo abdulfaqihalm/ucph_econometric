@@ -1,0 +1,50 @@
+---
+title: "Code for Econometric Exam"
+author: "Abdullah Faqih Al Mubarok"
+format: html
+editor: visual
+---
+
+```{r}
+#| warning: false
+
+#load libaries
+library(wooldridge)
+library(tidyverse)
+library(stargazer)
+library(lmtest)
+library(car)
+library(sandwich)
+library(AER)
+
+#load data 
+data_01 <- get(load("examdata2023_01.RData"))
+data_02 <- get(load("examdata2023_02.RData"))
+```
+
+## Part 1: The Returns to Education
+
+2.  Below code is used for estimating 
+  
+  \begin{equation}
+    \label{eq:1}
+    wage = \alpha + \beta educ + u
+  \end{equation}
+  
+```{r}
+#| warning: false
+#| eval: false
+model_01 <- lm(data = data_01, 
+               formula = wage ~ education)
+
+stargazer(model_01, type = "latex")
+```
+
+3.  Covariance check
+```{r}
+#| warning: false
+#| eval: false
+cov(data_01$education, data_01$libraries)
+```
+
+

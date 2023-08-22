@@ -26,7 +26,7 @@ The political system is searching for ways to reduce the problem. One way to do 
 The data set is called `softdrink.RData` and is available [here](https://absalon.ku.dk/courses/67218/files/7319806?module_item_id=2070374). It is a subset of a larger data set from the research company GfK ConsumerTracking Scandinavia which covers approximately 2500 consumers that, every week, report their purchase of everyday staples like food for in-house consumption. The respondents select themselves into the panel. The purchases are registered by the household member who is mainly responsible for shopping. The data set covers aggregate food and soft drink expenditures in 2004. The data set also includes household characteristics aggregated into monthly observations. That is, each observation of purchases is from a select week. The data set contains the following variables:
 
 | Variable      | Description                                                   |
-|-----------------|-------------------------------------------------------|
+|---------------|---------------------------------------------------------------|
 | `volpers`     | volume of soda per person in household                        |
 | `soft`        | $=1$ if soda has been bought in a given month, 0 otherwise    |
 | `price`       | average price paid for soda in a month                        |
@@ -65,7 +65,7 @@ Please answer the following questions:
 2.  What do you think are the main sources of errors in this type of data in relation to soft drink consumption? For instance, what problems may arise as a result of self-selection? Discuss.
 
     The first error that I noticed is the way the data was collected. The data was self-selected which might be introduces exogenous variables due to not randomly selected samples.\
-    In addition, the data was counted based on the selected member of household. This still have a leak if the members of the household didn't report completely about their purchase e.g. when a member bought soda at work. \
+    In addition, the data was counted based on the selected member of household. This still have a leak if the members of the household didn't report completely about their purchase e.g. when a member bought soda at work.\
     Aside that, it seems that the volume of consumption is the average of each household which seems that can be redundant e.g. if a household consists of two adults and one child where the child is only the consumer of soda, per person may be not to large by if it is per person, the child consumption will be large.
 
 3.  Draw and present a histogram of the age distribution for the main shopping responsible. Do you think it is representative of the Danish population?
@@ -151,7 +151,7 @@ Please answer the following questions:
 10. Do these assumptions seem reasonable in our model? Reflect on your answer.
 
     MLR.1: reasonable since our population model is linear\
-    MLR.2: Not reasonable because the self-selection colledted data introduces not random sample. \
+    MLR.2: Not reasonable because the self-selection colledted data introduces not random sample.\
     MRL.3: rewe can check by computing the correlation matrix:
 
     ```{r}
@@ -162,7 +162,7 @@ Please answer the following questions:
     ```
 
     from the result above, it seems we don't have any perfect collinearity between vairables which makes MLR.3 valid.\
-    MLR.4: We are not sure for it since it is really hard to make sure that we include all of the factors so that the population error model is zero given our samples. \
+    MLR.4: We are not sure for it since it is really hard to make sure that we include all of the factors so that the population error model is zero given our samples.\
     MLR.5-6: We need to investigate further from our result
 
 ## Problem 6.2

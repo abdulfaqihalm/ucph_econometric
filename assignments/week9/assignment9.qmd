@@ -61,7 +61,7 @@ Use the data in `KIELMC` for this exercise.
 \end{align*}
 The variable $y81$ is a binary indicator variable for whether or not the year is 1981. If building the incinerator reduces the value of homes closer to the site, what is the sign of $\delta_1$? What does it mean if $\beta_1>0$?
 
-The sign of $\delta_1$ means that whether the distance to incinerator in 1981 reduced or increased house price. Meanwhile, if $\beta_1>0$ it means whether the distance from incinerator only actually increased the housing price (assuming other factors are constant). 
+The sign of $\delta_1$ means how the distance to incinerator has changed in 1981 reduced or increased house price (in other word, it tells the slope difference with respect to log(dist) between year 1981 and other year). Meanwhile, if $\beta_1>0$ it means whether the distance from incinerator only actually increased the housing price (assuming other factors are constant). 
 
 2. Estimate the model from part 1. and report the results in the usual form. Interpret the coefficient on $y81\times \log(dist)$. What do you conclude?
 

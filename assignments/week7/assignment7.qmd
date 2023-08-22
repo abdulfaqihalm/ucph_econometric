@@ -36,7 +36,7 @@ The political system is searching for ways to reduce the problem. One way to do 
 The data set is called `softdrink.RData` and is available [here](https://absalon.ku.dk/courses/57563/files/6209254?module_item_id=1712482). It is a subset of a larger data set from the research company GfK ConsumerTracking Scandinavia which covers approximately 2500 consumers that, every week, report their purchase of everyday staples like food for in-house consumption. The respondents select themselves into the panel. The purchases are registered by the household member who is mainly responsible for shopping. The data set covers aggregate food and soft drink expenditures in 2004. The data set also includes household characteristics aggregated into monthly observations. That is, each observation of purchases is from a select week. The data set contains the following variables:
 
 | Variable      | Description                                                   |
-|-----------------|-------------------------------------------------------|
+|---------------|---------------------------------------------------------------|
 | `volpers`     | volume of soda per person in household                        |
 | `soft`        | $=1$ if soda has been bought in a given month, 0 otherwise    |
 | `price`       | average price paid for soda in a month                        |
@@ -282,7 +282,7 @@ In an exam situation, I would expect you to spend more time discussing the impli
 
     \begin{align*}
      H_{0} : \beta_{urban} = \beta_{capita} = 0 \\  H_{1} : \beta_{urban} = 0 or \beta_{capita} = 0
-    \end{align*} \
+    \end{align*}\
     In addition, we set the significance level 5%.
 
     ```{r}
@@ -315,22 +315,25 @@ Use the data in `wage1` for this exercise.
 
     To calculate the difference in gender, the difference between the two is :
 
+    ```{=tex}
     \begin{align*}
          diff = -0.227 - 0.0056educ
     \end{align*}
-
+    ```
     where $educ = 12.5$, we have:
 
+    ```{=tex}
     \begin{align*}
          \%\Delta_{wage} = -0.227  - (0.0056*12.5) \\      = -0.297 = -29.7%
     \end{align*}
-
+    ```
     where $educ = 0$, we have:
 
+    ```{=tex}
     \begin{align*}
          \%\Delta_{wage} = -0.227 = -22.7% 
     \end{align*}
-
+    ```
     From the calculation above we can see that the additional 12.5 years of education adding the difference of -7%.
 
 2.  Run the regression used to obtain the above estimation, but with $female\cdot (educ-12.5)$ replacing $female\cdot educ$. How do you interpret the coefficient on $female$ now?
@@ -378,7 +381,7 @@ Use the data in `wage1` for this exercise.
            mapping = (aes(x = fit, y = u ))) + 
       geom_point() + 
       geom_line(y = 0) + 
-      labs(title = "E(u_hat | y_hat) distribution")
+      labs(title = "E(u_hat | y_hat) distribution") + 
       theme_bw()
 
     # Calculate robust se's
@@ -401,7 +404,7 @@ Use the data in `wage1` for this exercise.
            mapping = (aes(x = fit, y = u ))) + 
       geom_point() + 
       geom_line(y = 0) + 
-      labs(title = "E(u_hat | y_hat) distribution of log() model")
+      labs(title = "E(u_hat | y_hat) distribution of log() model") + 
       theme_bw()
 
     # Calculate robust se's
