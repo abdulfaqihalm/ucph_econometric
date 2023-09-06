@@ -301,7 +301,7 @@ Use the data in `discrim` to answer this question.
 
 4.  In the regression in part 3, what happens to the individual statistical significance of $\log(income)$ and $prppov$? Are these variables jointly significant (compute a p-value)? What do you make of your answers?
 
-    From the previous estimation, the p-value for $\log(income)$ and $prppov$ are above our threshold (0.05) which means that we can not confidently reject the null hypothesis. \
+    From the previous estimation, the p-value for $\log(income)$ and $prppov$ are above our threshold (0.05) which means that we can not confidently reject the null hypothesis.\
     To know whether the two are jointly wee need to calculate the resteriction model
 
     ```{r}
@@ -311,7 +311,7 @@ Use the data in `discrim` to answer this question.
     anova(soda_model2, soda_model2_r)
     ```
 
-    From the result above we could conclude that the two are not jointly significant. One of them should be not equal to zero
+    From the result above we could conclude that the two are not jointly significant.
 
 5.  Given the results of the previous regressions, which one would you report as most reliable in determining whether the racial markup of a zip code influences local fast-food prices?\
     The last regression give the best R-squared compared to others which indicates a "good" fit. In addition, economically, it makes sense that for every 1% increment of the prppov, it could increase 0.038% of the fast-food price when other factors are fixed which is low enough compared to previous regresions.
